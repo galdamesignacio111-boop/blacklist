@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Chanter">
+  <defs>
+    <linearGradient id="chanterBg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#2d2440"/>
+      <stop offset="100%" stop-color="#160f22"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="12" fill="url(#chanterBg)"/>
+  <path d="M20 45 C25 34 28 19 35 18 C39 18 42 20 42 25 C42 31 38 34 31 36 C27 37 21 39 20 45 Z" fill="#c9a0ff" opacity="0.9"/>
+  <circle cx="22" cy="46" r="8" fill="#c9a0ff" opacity="0.85"/>
+  <circle cx="39" cy="18" r="7" fill="#c9a0ff" opacity="0.85"/>
+  <path d="M28 46 V20" stroke="#f0e5ff" stroke-width="3" stroke-linecap="round"/>
+</svg>

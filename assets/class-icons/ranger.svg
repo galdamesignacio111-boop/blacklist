@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Ranger">
+  <defs>
+    <linearGradient id="rangerBg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#1d4034"/>
+      <stop offset="100%" stop-color="#0c1d17"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="12" fill="url(#rangerBg)"/>
+  <path d="M18 47 L32 12 L46 47 L32 39 Z" fill="#7ce6c1" opacity="0.9"/>
+  <path d="M32 12 V42" stroke="#e7fff7" stroke-width="3" stroke-linecap="round"/>
+  <path d="M20 46 L32 14 L44 46" fill="none" stroke="#e7fff7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M44 46 L32 39 L20 46" fill="none" stroke="#e7fff7" stroke-width="3" stroke-linecap="round"/>
+</svg>

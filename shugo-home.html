@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en" style="background-color: #0d1117;">
+<head><script nonce="bdZn8PT-ewtPUZ-PnMAWqw">window.__shugoRuntimeConfig={"appInsightsConnectionString":"InstrumentationKey=c1c1e42c-236f-4b7c-8ab5-a3d54182b108;IngestionEndpoint=https://francecentral-1.in.applicationinsights.azure.com/;LiveEndpoint=https://francecentral.livediagnostics.monitor.azure.com/;ApplicationId=2a024e10-22d6-4ff6-be1e-3e59881e9f1d"};</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AION 2 Armory, Profile & Character Database | Shugo.GG</title>
+  <meta name="description" content="Your AION 2 companion and armory: character search, gear, Combat Power leaderboard, class builds, tier list, timers, item database, news and a free DPS meter app for Windows.">
+  <meta name="keywords" content="AION 2, AION 2 armory, AION 2 profile, AION 2 character profile, AION 2 player profile, AION 2 character search, AION 2 character lookup, AION 2 gear inspector, AION 2 rankings, AION 2 rift timer, AION 2 builds, AION 2 leaderboard, AION 2 PvP, AION 2 PvE, AION 2 tier list, AION 2 class tier list, AION 2 DPS meter, AION 2 timers, AION 2 PvP tier list, AION 2 PvE tier list, AION 2 database, AION 2 guide, AION 2 tools, Shugo GG, Shugo.GG, AION armory, AION profile">
+  <meta name="author" content="Shugo.GG">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="copyright" content="© 2026 Shugo.GG. All rights reserved.">
+  <link rel="canonical" href="https://shugo.gg/"><link rel="alternate" hreflang="x-default" href="https://shugo.gg/"><link rel="alternate" hreflang="en" href="https://shugo.gg/"><link rel="alternate" hreflang="fr" href="https://shugo.gg/fr"><link rel="alternate" hreflang="de" href="https://shugo.gg/de"><link rel="alternate" hreflang="es" href="https://shugo.gg/es"><link rel="alternate" hreflang="pt-BR" href="https://shugo.gg/pt-br"><link rel="alternate" hreflang="ru" href="https://shugo.gg/ru"><link rel="alternate" hreflang="ja" href="https://shugo.gg/ja"><link rel="alternate" hreflang="ko" href="https://shugo.gg/ko">
+  <link rel="alternate" type="application/rss+xml" title="Shugo.GG - AION 2 News &amp; Patch Notes" href="https://shugo.gg/feed.xml">
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+  
+  <!-- Favicons (ICO first for Google crawler, SVG for modern browsers) -->
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/images/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/assets/images/favicon-48x48.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Shugo.GG">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#c9a227">
+  
+  <!-- DNS prefetch -->
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+  <link rel="dns-prefetch" href="https://js.monitor.azure.com">
+  <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com">
+  
+  <!-- Google Consent Mode v2 - Set defaults before any Google scripts load -->
+  <!-- nonce="bdZn8PT-ewtPUZ-PnMAWqw": trusted template scripts opt in to the per-request
+       CSP nonce, which the server substitutes (see injectCspNonce in backend/server.ts). -->
+  <script nonce="bdZn8PT-ewtPUZ-PnMAWqw">
+    // Marks a JS-capable client: hides the server-rendered .ssr-only fallbacks (globals.css) that
+    // crawlers and AI agents without JavaScript read instead of the React app.
+    document.documentElement.classList.add('js');
+
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    
+    // Default: deny all for EEA users until consent (GDPR regions)
+    // Non-EEA users get granted by default (no consent banner needed)
+    gtag('consent', 'default', {
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'analytics_storage': 'denied',
+      'wait_for_update': 500,
+      'region': ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 
+                 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 
+                 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'IS', 'LI', 'NO', 'GB', 'CH']
+    });
+    
+    // Enable URL passthrough for better ad measurement when storage denied
+    gtag('set', 'url_passthrough', true);
+    
+    // Redact ad click identifiers when ad_storage is denied
+    gtag('set', 'ads_data_redaction', true);
+    
+    // Check if user already consented (from localStorage)
+    try {
+      var consent = localStorage.getItem('shugo_cookie_consent');
+      if (consent) {
+        var parsed = JSON.parse(consent);
+        if (parsed && parsed.preferences && parsed.version === '1.4') {
+          gtag('consent', 'update', {
+            'analytics_storage': parsed.preferences.analytics ? 'granted' : 'denied',
+            'ad_storage': parsed.preferences.advertising ? 'granted' : 'denied',
+            'ad_user_data': parsed.preferences.advertising ? 'granted' : 'denied',
+            'ad_personalization': parsed.preferences.personalizedAds ? 'granted' : 'denied'
+          });
+        }
+      }
+    } catch(e) {}
+  </script>
+  
+  <!-- Google AdSense -->
+  <script nonce="bdZn8PT-ewtPUZ-PnMAWqw" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4996281496696691" crossorigin="anonymous"></script>
+  
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- The NCSOFT APIs go through /api/proxy: the browser itself only reaches NC for the icons (2026-10-28: the
+       tw.ncsoft.com and aion2.plaync.com preconnects opened connections no page used) -->
+  <link rel="preconnect" href="https://assets.playnccdn.com" crossorigin>
+  
+  <!-- Fonts - preload for faster loading, use display=swap for consistent rendering -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" data-preload-style>
+  <script nonce="bdZn8PT-ewtPUZ-PnMAWqw">
+    (function () {
+      try {
+        var links = document.querySelectorAll('link[data-preload-style]');
+        for (var i = 0; i < links.length; i++) {
+          (function (link) {
+            function promote() {
+              link.rel = 'stylesheet';
+              link.removeAttribute('data-preload-style');
+              link.removeEventListener('load', promote);
+            }
+            link.addEventListener('load', promote);
+          })(links[i]);
+        }
+      } catch (e) {
+        // ignore
+      }
+    })();
+  </script>
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap"></noscript>
+  
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="Shugo.GG">
+  <meta property="og:title" content="AION 2 Armory, Profile & Character Database | Shugo.GG">
+  <meta property="og:description" content="Your AION 2 companion and armory: character search, gear, Combat Power leaderboard, class builds, tier list, timers, item database, news and a free DPS meter app for Windows.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://shugo.gg/">
+  <meta property="og:locale" content="en_US"><meta property="og:locale:alternate" content="fr_FR"><meta property="og:locale:alternate" content="de_DE"><meta property="og:locale:alternate" content="es_ES"><meta property="og:locale:alternate" content="pt_BR"><meta property="og:locale:alternate" content="ru_RU"><meta property="og:locale:alternate" content="ja_JP"><meta property="og:locale:alternate" content="ko_KR">
+  <meta property="og:image" content="https://shugo.gg/assets/images/shugo-og-image.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Shugo.GG - AION 2 Armory, Profile & Character Database">
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AION 2 Armory, Profile & Character Database | Shugo.GG">
+  <meta name="twitter:description" content="Your AION 2 companion and armory: character search, gear, Combat Power leaderboard, class builds, tier list, timers, item database, news and a free DPS meter app for Windows.">
+  <meta name="twitter:image" content="https://shugo.gg/assets/images/shugo-og-image.png">
+  
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Shugo.GG",
+    "alternateName": ["Shugo GG", "ShugoGG"],
+    "url": "https://shugo.gg/",
+    "description": "Your AION 2 companion and armory: character search, gear, Combat Power leaderboard, class builds, tier list, timers, item database, news and a free DPS meter app for Windows.",
+    "inLanguage": "en",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://shugo.gg/?search={search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Shugo.GG",
+    "alternateName": ["Shugo GG", "ShugoGG"],
+    "url": "https://shugo.gg/",
+    "logo": "https://shugo.gg/assets/images/shugologo.png",
+    "image": "https://shugo.gg/assets/images/shugo-og-image.png",
+    "description": "Your AION 2 companion and armory: character search, gear, Combat Power leaderboard, class builds, tier list, timers, item database, news and a free DPS meter app for Windows.",
+    "foundingDate": "2025",
+    "sameAs": ["https://discord.gg/Rh53jMKh3e"],
+    "knowsAbout": ["AION 2", "AION 2 Armory", "AION 2 Character Profiles", "AION 2 Combat Power Leaderboard", "AION 2 Class Builds", "AION 2 Tier List", "AION 2 Timers", "AION 2 Item Database", "AION 2 DPS Meter"],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer support",
+      "url": "https://shugo.gg/"
+    }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Shugo.GG",
+    "alternateName": ["Shugo GG", "ShugoGG"],
+    "url": "https://shugo.gg/",
+    "applicationCategory": "GameApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript. Requires HTML5.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "description": "Free AION 2 companion web app: character profile search, gear inspection, the Combat Power leaderboard, class builds, the class tier list, event timers, the item database and the interactive map.",
+    "screenshot": "https://shugo.gg/assets/images/shugo-og-image.png",
+    "featureList": [
+      "Character Profile Search",
+      "Gear Inspector",
+      "Combat Power Leaderboard",
+      "Class Builds",
+      "Class Tier List",
+      "Event Timers",
+      "Item Database",
+      "Interactive Map",
+      "News & Patch Notes"
+    ],
+    "softwareVersion": "1.3.0",
+    "author": {
+      "@type": "Organization",
+      "name": "Shugo.GG",
+      "url": "https://shugo.gg/"
+    }
+  }
+  </script>
+
+  <!-- Application Insights is initialized in React (see src/telemetry/appInsights.ts) -->
+
+  <!-- Legacy analytics.js removed: App Insights is the single telemetry pipeline. -->
+
+  
+  
+  <!-- Critical inline styles to prevent white flash -->
+  <style>
+    :root { --nav-height: 64px; --footer-height: 48px; }
+    @media (max-width: 768px) { :root { --nav-height: 54px; } }
+    @media (max-width: 480px) { :root { --nav-height: 50px; } }
+    html, body { margin: 0; padding: 0; background: #0d1117; color: #dce7ff; min-height: 100%; }
+    html { height: 100%; background: #0d1117; }
+    /* Font fallback to minimize CLS from web font loading */
+    body { font-family: 'Noto Sans', system-ui, -apple-system, sans-serif; min-height: 100vh; font-synthesis: none; }
+    /* Viewport settings */
+    html, body { overflow: hidden !important; height: 100% !important; width: 100% !important; }
+    body.home-page { display: flex; flex-direction: column; }
+    
+    /* 
+     * CLS Prevention Strategy:
+     * #root uses position:absolute to create a layer that doesn't affect document flow.
+     * When React renders content, it appears "on top" without shifting anything.
+     * This is the only way to prevent CLS in a client-side rendered SPA without SSR.
+     */
+    #root {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    
+    /* Main content layout */
+    .main-content { flex: 1; display: flex; flex-direction: column; padding-top: var(--nav-height); min-height: calc(100vh - var(--nav-height) - var(--footer-height)); overflow: hidden; }
+    /* Nav is fixed */
+    nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-height); z-index: 1000; background: linear-gradient(180deg, rgba(12, 16, 24, 0.98) 0%, rgba(12, 16, 24, 0.95) 100%); border-bottom: 1px solid rgba(255, 149, 0, 0.12); backdrop-filter: blur(20px); }
+    /* View containers */
+    #searchView { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; }
+    #dynamicView { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; }
+    #searchView.hidden, #dynamicView.hidden { display: none; }
+    /* Hero section */
+    #heroSection { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 16px 20px 96px; position: relative; min-height: 100%; box-sizing: border-box; overflow: hidden; }
+    #heroContent { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 600px; margin-top: auto; margin-bottom: auto; }
+    /* Hide nav brand on home page */
+    .home-page .nav-brand { opacity: 0; pointer-events: none; }
+    /* Suppress transitions until app is ready */
+    html:not(.app-ready) * { transition: none !important; animation: none !important; }
+    /* Animations-disabled styles */
+    body.animations-disabled, body.animations-disabled *, body.animations-disabled *::before, body.animations-disabled *::after { animation: none !important; transition: none !important; }
+    body.animations-disabled .hero-bg-effects { display: none !important; }
+  </style>
+  
+  <!-- Apply animations-disabled class before CSS loads -->
+  <script nonce="bdZn8PT-ewtPUZ-PnMAWqw">
+    // Without the graphics card (utils/graphics, kept for the browser session) the animations are off before the page
+    // draws, whatever was chosen: the processor would redraw every moving or frosted thing at every frame.
+    var shugoNoGpu = false;
+    try { shugoNoGpu = sessionStorage.getItem('shugo_no_gpu') === '1'; } catch (e) { /* the footer probes */ }
+    if (shugoNoGpu) document.documentElement.classList.add('no-gpu');
+    // A touch screen without a choice starts them off too (utils/graphics TOUCH_QUERY): phones heat under them
+    var shugoAnimChoice = null;
+    try { shugoAnimChoice = localStorage.getItem('shugo_animations_disabled'); } catch (e) { /* no storage */ }
+    var shugoTouch = !!(window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches);
+    if (shugoNoGpu || shugoAnimChoice === 'true' || (shugoAnimChoice === null && shugoTouch)) {
+      document.documentElement.classList.add('animations-disabled');
+      document.addEventListener('DOMContentLoaded', function() {
+        document.body.classList.add('animations-disabled');
+      });
+    }
+  </script>
+  <link rel="stylesheet" crossorigin href="/assets/main-BSi3jaVF.css">
+  <script nonce="bdZn8PT-ewtPUZ-PnMAWqw" type="module" crossorigin src="/assets/main-BqN_OyuT.js"></script>
+</head>
+<body class="home-page">
+  <!-- SPA Loading Bar -->
+  
+
+  <!-- Set correct route body class ASAP (before React mounts) -->
+  <script nonce="bdZn8PT-ewtPUZ-PnMAWqw">
+    (function () {
+      try {
+        var path = window.location && window.location.pathname ? window.location.pathname : '/';
+        var isHomeLike = path === '/' || path === '/character';
+
+        var pageClass = '';
+        if (isHomeLike) pageClass = 'home-page';
+        else if (path === '/leaderboard') pageClass = 'leaderboard-page';
+        else if (path === '/tierlist') pageClass = 'tierlist-page';
+        else if (path === '/items' || path.indexOf('/items/') === 0) pageClass = 'items-page';
+        else if (path === '/news' || path.indexOf('/news/') === 0) pageClass = 'news-page';
+        else if (path.indexOf('/profile') === 0) pageClass = 'profile-page';
+
+        var classesToRemove = [
+          'home-page',
+          'leaderboard-page',
+          'items-page',
+          'news-page',
+          'profile-page',
+          'tierlist-page',
+        ];
+
+        document.body.classList.remove.apply(document.body.classList, classesToRemove);
+        if (pageClass) document.body.classList.add(pageClass);
+      } catch (e) {
+        // ignore
+      }
+    })();
+  </script>
+  
+  <div id="root"><section class="ssr-only" lang="en" data-ssr="home">
+<h1>AION 2 Armory - Character Search, Profiles &amp; Gear Database</h1>
+<p>Your AION 2 companion and armory: character search, gear, Combat Power leaderboard, class builds, tier list, timers, item database, news and a free DPS meter app for Windows.</p>
+<ul>
+<li><a href="https://shugo.gg/character">AION 2 Character Search &amp; Armory</a></li>
+<li><a href="https://shugo.gg/leaderboard">AION 2 Combat Power Leaderboard</a></li>
+<li><a href="https://shugo.gg/tierlist">AION 2 Class Tier List</a></li>
+<li><a href="https://shugo.gg/builds">AION 2 Class Builds</a></li>
+<li><a href="https://shugo.gg/database">AION 2 Database</a></li>
+<li><a href="https://shugo.gg/map">Map</a></li>
+<li><a href="https://shugo.gg/timers">Timers</a></li>
+<li><a href="https://shugo.gg/news">News</a></li>
+<li><a href="https://shugo.gg/streams">Live streams</a></li>
+<li><a href="https://shugo.gg/app">Shugo.GG App: DPS meter, auras and overlays for AION 2</a></li>
+<li><a href="https://shugo.gg/faq">AION 2 &amp; Shugo.GG FAQ</a></li>
+</ul>
+</section></div>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" nonce="bdZn8PT-ewtPUZ-PnMAWqw" data-cf-beacon='{"version":"2024.11.0","token":"5f52e3c828d847ab8481619a87a2e497","r":1,"spa":2}' crossorigin="anonymous"></script>
+</body>
+</html>
+

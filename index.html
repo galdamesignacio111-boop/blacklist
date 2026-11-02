@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blacklist</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <div class="brand-wrap">
+          <div class="brand-mark" aria-hidden="true">B</div>
+          <div>
+            <p class="eyebrow">Blacklist</p>
+            <h1>Force / Party Manager</h1>
+          </div>
+        </div>
+
+        <div class="auth-strip">
+          <span id="currentRoleBadge" class="role-badge">Viewer</span>
+          <button id="staffLoginBtn" class="secondary-btn" type="button">Entrar Staff</button>
+          <button id="staffLogoutBtn" class="secondary-btn" type="button">Salir</button>
+        </div>
+      </header>
+
+      <nav class="view-switcher" aria-label="Vistas">
+        <button class="view-btn active" type="button" data-view="force">Force Manager</button>
+        <button class="view-btn" type="button" data-view="members">Lista de miembros</button>
+        <button class="view-btn" type="button" data-view="market">Market</button>
+      </nav>
+
+      <section id="forceManagerView" class="view-panel active">
+        <main class="layout">
+          <section class="panel form-panel">
+            <h2>Buscar y mover miembro</h2>
+            <div class="search-move-panel">
+              <label>
+                <span>Buscar persona</span>
+                <input id="memberSearchInput" type="text" maxlength="30" placeholder="Escribe nombre" />
+              </label>
+
+              <div id="memberSearchResults" class="member-search-results"></div>
+
+              <div class="field-row">
+                <label>
+                  <span>Fuerza</span>
+                  <select id="moveForceSelect"></select>
+                </label>
+                <label>
+                  <span>Party</span>
+                  <select id="movePartySelect"></select>
+                </label>
+              </div>
+
+              <div class="field-row">
+                <button id="moveMemberBtn" class="primary-btn" type="button">Mover a party</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel overview-panel">
+            <div class="stats-head">
+              <h2>Resumen</h2>
+              <button id="addForceBtn" class="secondary-btn" type="button">+ Agregar fuerza</button>
+            </div>
+            <div class="stat-pill"><strong id="summaryTotalMembers">0</strong> miembros</div>
+            <div id="guildClassSummary" class="guild-class-summary" aria-label="Clases de la guild"></div>
+            <div class="force-summary" id="forceSummary"></div>
+          </section>
+        </main>
+
+        <section class="roster-section">
+          <div class="section-head">
+            <h2>Roster por fuerza</h2>
+          </div>
+          <div id="rosterContainer" class="roster-container"></div>
+        </section>
+      </section>
+
+      <section id="memberListView" class="view-panel" aria-live="polite">
+        <section class="panel global-list-panel">
+          <div class="stats-head">
+            <h2>Lista de miembros</h2>
+            <div class="stat-pill"><strong id="globalTotalMembers">0/128</strong></div>
+          </div>
+
+          <div class="member-toolbar">
+            <button id="openAddMemberBtn" class="primary-btn" type="button">+ Agregar miembro</button>
+            <button id="syncAllStatsBtn" class="secondary-btn" type="button">Sync iLvl/CP (NC)</button>
+            <label class="member-list-search">
+              <span>Buscar miembro</span>
+              <input id="memberListSearchInput" type="text" maxlength="30" placeholder="Escribe un nombre" />
+            </label>
+            <label class="member-list-search">
+              <span>Clase</span>
+              <select id="memberListClassFilter"></select>
+            </label>
+            <label class="member-list-search">
+              <span>Fuerza</span>
+              <select id="memberListForceFilter"></select>
+            </label>
+            <label class="member-list-search">
+              <span>Orden</span>
+              <select id="memberListSort">
+                <option value="name-asc">Nombre (A-Z)</option>
+                <option value="name-desc">Nombre (Z-A)</option>
+                <option value="ilevel-desc">iLvl (alto-bajo)</option>
+                <option value="cp-desc">CP (alto-bajo)</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="nc-sync-bar">
+            <label class="member-list-search">
+              <span>API NC Proxy</span>
+              <input id="ncApiBaseInput" type="url" placeholder="http://localhost:8787" />
+            </label>
+            <label class="member-list-search">
+              <span>Región Preferida</span>
+              <select id="ncRegionSelect">
+                <option value="all">Todas</option>
+                <option value="la">Sudamérica (LA)</option>
+                <option value="eu">Europa (EU)</option>
+                <option value="nae">NA East</option>
+                <option value="naw">NA West</option>
+                <option value="as">Asia</option>
+              </select>
+            </label>
+            <button id="saveNcApiBaseBtn" class="secondary-btn" type="button">Guardar API</button>
+            <p id="syncStatusText" class="sync-status">Sin sincronizar</p>
+          </div>
+
+          <div id="memberListClassSummary" class="guild-class-summary member-list-class-summary" aria-label="Filtros por clase"></div>
+          <div class="global-member-table-head" aria-hidden="true">
+            <span>Miembro / Personaje</span>
+            <span>Clase</span>
+            <span>Fuerza asignada</span>
+            <span>Party</span>
+            <span>iLvl / CP</span>
+            <span>Acciones</span>
+          </div>
+          <div id="globalMemberList" class="global-member-list global-member-table-body"></div>
+        </section>
+      </section>
+
+      <section id="marketView" class="view-panel" aria-live="polite">
+        <section class="panel market-side-panel">
+          <div class="market-head">
+            <h2>Market</h2>
+          </div>
+          <p class="market-help">Se actualiza automáticamente al entrar a la sección Market.</p>
+          <div class="market-frame-wrap">
+            <iframe id="marketFrame" title="Market" src="https://aion2.exchange" loading="lazy" referrerpolicy="no-referrer"></iframe>
+          </div>
+        </section>
+      </section>
+    </div>
+
+    <div id="addMemberModal" class="add-member-modal" aria-hidden="true">
+      <div class="modal-backdrop" data-close-modal="true"></div>
+      <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="addMemberTitle">
+        <div class="modal-header">
+          <h2 id="addMemberTitle">Agregar miembro</h2>
+          <button id="closeAddMemberModal" class="close-modal" type="button" aria-label="Cerrar">×</button>
+        </div>
+
+        <form id="memberForm" class="member-add-form">
+          <div class="field-row">
+            <label>
+              <span>Fuerza</span>
+              <select id="forceSelect" required></select>
+            </label>
+            <label>
+              <span>Party</span>
+              <select id="partySelect" required></select>
+            </label>
+          </div>
+
+          <div class="field-row single">
+            <label>
+              <span>Nombre</span>
+              <input id="memberName" type="text" maxlength="20" placeholder="Ej: Akaris" required />
+            </label>
+          </div>
+
+          <div class="field-row single">
+            <label>
+              <span>Clase</span>
+              <select id="memberClass" required>
+                <option value="Templar">Templar</option>
+                <option value="Assassin">Assassin</option>
+                <option value="Ranger">Ranger</option>
+                <option value="Cleric">Cleric</option>
+                <option value="Chanter">Chanter</option>
+                <option value="Elementalist">Elementalist</option>
+                <option value="Sorcerer">Sorcerer</option>
+                <option value="Gladiator">Gladiator</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="field-row">
+            <label>
+              <span>iLvl</span>
+              <input id="memberIlevel" type="number" min="0" max="99999" placeholder="Ej: 3550" />
+            </label>
+            <label>
+              <span>CP</span>
+              <input id="memberCp" type="number" min="0" max="999999" placeholder="Ej: 12400" />
+            </label>
+          </div>
+
+          <div class="modal-actions">
+            <button class="secondary-btn" type="button" data-close-modal="true">Cancelar</button>
+            <button class="primary-btn" type="submit">Guardar miembro</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <template id="partyTemplate">
+      <article class="party-card">
+        <div class="party-card-header">
+          <div>
+            <p class="party-force-label"></p>
+            <h3 class="party-name"></h3>
+          </div>
+          <button class="ghost-btn delete-party-btn" type="button">Vaciar party</button>
+        </div>
+        <div class="member-list"></div>
+        <div class="empty-slot-hint">Espacios libres: <span class="free-slots"></span></div>
+      </article>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
