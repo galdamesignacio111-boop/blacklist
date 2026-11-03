@@ -120,24 +120,30 @@
             </label>
           </div>
 
-          <div class="nc-sync-bar">
-            <label class="member-list-search">
-              <span>API NC Proxy</span>
-              <input id="ncApiBaseInput" type="url" placeholder="https://tu-backend.example.com" />
-            </label>
-            <label class="member-list-search">
-              <span>Región Preferida</span>
-              <select id="ncRegionSelect">
-                <option value="all">Todas</option>
-                <option value="la">Sudamérica (LA)</option>
-                <option value="eu">Europa (EU)</option>
-                <option value="nae">NA East</option>
-                <option value="naw">NA West</option>
-                <option value="as">Asia</option>
-              </select>
-            </label>
-            <button id="saveNcApiBaseBtn" class="secondary-btn" type="button">Guardar API</button>
-            <p id="syncStatusText" class="sync-status">Sin sincronizar</p>
+          <div class="nc-config-header">
+            <button id="toggleNcConfigBtn" class="secondary-btn nc-config-toggle" type="button" aria-expanded="false">Config NC</button>
+          </div>
+
+          <div id="ncConfigPanel" class="nc-config-panel collapsed" aria-hidden="true">
+            <div class="nc-sync-bar">
+              <label class="member-list-search">
+                <span>API NC Proxy</span>
+                <input id="ncApiBaseInput" type="url" placeholder="https://tu-backend.example.com" />
+              </label>
+              <label class="member-list-search">
+                <span>Región Preferida</span>
+                <select id="ncRegionSelect">
+                  <option value="all">Todas</option>
+                  <option value="la">Sudamérica (LA)</option>
+                  <option value="eu">Europa (EU)</option>
+                  <option value="nae">NA East</option>
+                  <option value="naw">NA West</option>
+                  <option value="as">Asia</option>
+                </select>
+              </label>
+              <button id="saveNcApiBaseBtn" class="secondary-btn" type="button">Guardar config</button>
+              <p id="syncStatusText" class="sync-status">Sin sincronizar</p>
+            </div>
           </div>
 
           <div id="memberListClassSummary" class="guild-class-summary member-list-class-summary" aria-label="Filtros por clase"></div>
@@ -225,6 +231,17 @@
             <button class="primary-btn" type="submit">Guardar miembro</button>
           </div>
         </form>
+      </div>
+    </div>
+
+    <div id="characterProfileModal" class="add-member-modal" aria-hidden="true">
+      <div class="modal-backdrop" data-close-profile-modal="true"></div>
+      <div class="modal-dialog profile-modal" role="dialog" aria-modal="true" aria-labelledby="characterProfileTitle">
+        <div class="modal-header">
+          <h2 id="characterProfileTitle">Perfil del personaje</h2>
+          <button id="closeCharacterProfileModal" class="close-modal" type="button" aria-label="Cerrar">×</button>
+        </div>
+        <div id="characterProfileBody" class="profile-modal-body"></div>
       </div>
     </div>
 

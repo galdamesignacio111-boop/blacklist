@@ -424,10 +424,15 @@ const ncApiBaseInput = document.getElementById('ncApiBaseInput');
 const saveNcApiBaseBtn = document.getElementById('saveNcApiBaseBtn');
 const syncStatusText = document.getElementById('syncStatusText');
 const ncRegionSelect = document.getElementById('ncRegionSelect');
+const toggleNcConfigBtn = document.getElementById('toggleNcConfigBtn');
+const ncConfigPanel = document.getElementById('ncConfigPanel');
 const currentRoleBadge = document.getElementById('currentRoleBadge');
 const staffLoginBtn = document.getElementById('staffLoginBtn');
 const staffLogoutBtn = document.getElementById('staffLogoutBtn');
 const marketFrame = document.getElementById('marketFrame');
+const characterProfileModal = document.getElementById('characterProfileModal');
+const characterProfileBody = document.getElementById('characterProfileBody');
+const closeCharacterProfileModalBtn = document.getElementById('closeCharacterProfileModal');
 
 function applyTheme(themeName) {
   const safeTheme = themeName === 'market' ? 'market' : 'default';
@@ -462,6 +467,36 @@ function initNcApiBase() {
   if (ncRegionSelect) {
     ncRegionSelect.value = getNcPreferredRegion();
   }
+
+  if (toggleNcConfigBtn && ncConfigPanel) {
+    toggleNcConfigPanel(false);
+  }
+}
+
+function getRegionDisplayLabel(region) {
+  const normalized = String(region || 'la').trim().toLowerCase();
+  const map = {
+    la: 'SA',
+    nae: 'NAE',
+    naw: 'NAW',
+    eu: 'EU',
+    as: 'AS',
+  };
+
+  return map[normalized] || normalized.toUpperCase();
+}
+
+function getProfileUrlForMember(member) {
+  if (!member) return '';
+  const characterId = member.ncCharacterId || member.ncCharacterId || '';
+  const serverId = member.ncServerId || '';
+  const region = member.ncRegion || getNcPreferredRegion() || 'la';
+
+  if (!characterId || !serverId) {
+    return '';
+  }
+
+  return `https://aion2.plaync.com/en-us/characters/${encodeURIComponent(serverId)}/${encodeURIComponent(characterId)}?region=${encodeURIComponent(region)}`;
 }
 
 function getNcPreferredRegion() {
@@ -485,6 +520,16 @@ function setSyncStatus(message, type = '') {
   if (type) {
     syncStatusText.classList.add(type);
   }
+}
+
+function toggleNcConfigPanel(forceOpen) {
+  if (!toggleNcConfigBtn || !ncConfigPanel) return;
+
+  const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : !ncConfigPanel.classList.contains('collapsed');
+  ncConfigPanel.classList.toggle('collapsed', !shouldOpen);
+  ncConfigPanel.setAttribute('aria-hidden', String(!shouldOpen));
+  toggleNcConfigBtn.setAttribute('aria-expanded', String(shouldOpen));
+  toggleNcConfigBtn.textContent = shouldOpen ? 'Ocultar config NC' : 'Config NC';
 }
 
 function isStaffRole() {
@@ -1006,6 +1051,105 @@ function updateSummary() {
     .join('');
 }
 
+function closeCharacterProfileModal() {
+  if (characterProfileModal) {
+    characterProfileModal.classList.remove('active');
+    characterProfileModal.setAttribute('aria-hidden', 'true');
+  }
+
+  if (characterProfileBody) {
+    characterProfileBody.innerHTML = '';
+  }
+}
+
+async function openCharacterProfileModal(memberId) {
+  const allMembers = getAllMembers();
+  const member = allMembers.find((item) => item.id === memberId);
+  if (!member) return;
+
+  if (characterProfileModal) {
+    characterProfileModal.classList.add('active');
+    characterProfileModal.setAttribute('aria-hidden', 'false');
+  }
+
+  if (!characterProfileBody) return;
+  characterProfileBody.innerHTML = '<div class="profile-loading">Cargando perfil del personaje…</div>';
+
+  try {
+    let targetMember = member;
+    if (!targetMember.ncRegion || !targetMember.ncServerId || !targetMember.ncCharacterId) {
+      const resolveResponse = await fetchJsonWithTimeout(buildNcResolveUrl(targetMember.name), 20000);
+      if (resolveResponse?.summary) {
+        applySyncedMemberData(targetMember, resolveResponse);
+      }
+    }
+
+    if (!targetMember.ncRegion || !targetMember.ncServerId || !targetMember.ncCharacterId) {
+      throw new Error('Este personaje aún no tiene datos NC asociados.');
+    }
+
+    const profileUrl = buildNcProfileUrl(targetMember);
+    const profileResponse = await fetchJsonWithTimeout(profileUrl, 20000);
+    const summary = profileResponse?.summary || {};
+    const equipEntries = Array.isArray(profileResponse?.equip?.equipment?.equipmentList)
+      ? profileResponse.equip.equipment.equipmentList
+      : [];
+    const serverName = summary.serverName || targetMember.ncServerName || 'Servidor';
+    const regionLabel = getRegionDisplayLabel(summary.region || targetMember.ncRegion || 'la');
+    const externalProfileUrl = `https://aion2.plaync.com/en-us/characters/${encodeURIComponent(summary.serverId || targetMember.ncServerId)}/${encodeURIComponent(summary.characterId || targetMember.ncCharacterId)}?region=${encodeURIComponent((summary.region || targetMember.ncRegion || 'la').toLowerCase())}`;
+
+    const statCards = [
+      ['Clase', summary.className || targetMember.className || '—'],
+      ['Nivel', summary.level ? String(summary.level) : '—'],
+      ['iLvl', summary.il ? formatStatValue(summary.il) : formatStatValue(targetMember.ilevel)],
+      ['CP', summary.cp ? formatStatValue(summary.cp) : formatStatValue(targetMember.cp)],
+      ['Servidor', serverName],
+      ['Región', `${regionLabel} • ${serverName}`],
+    ];
+
+    const equipmentHtml = equipEntries.length
+      ? equipEntries.slice(0, 8).map((item) => {
+          const name = item?.itemName || item?.name || item?.slotName || item?.slot || 'Equipo';
+          const slot = item?.slotName || item?.slot || 'Equipo';
+          return `<div class="profile-equipment-item"><span>${escapeHtml(slot)}</span><strong>${escapeHtml(name)}</strong></div>`;
+        }).join('')
+      : '<div class="profile-empty">Sin datos de equipo disponibles.</div>';
+
+    const html = `
+      <div class="profile-header">
+        <div class="profile-title-wrap">
+          <span class="profile-kicker">${escapeHtml(regionLabel)} • ${escapeHtml(serverName)}</span>
+          <h3>${escapeHtml(summary.characterName || targetMember.name || 'Personaje')}</h3>
+        </div>
+        <a class="profile-link" href="${externalProfileUrl}" target="_blank" rel="noreferrer">Abrir en AION NC</a>
+      </div>
+      <div class="profile-grid">
+        ${statCards.map(([label, value]) => `
+          <div class="profile-stat-card">
+            <span>${escapeHtml(label)}</span>
+            <strong>${escapeHtml(value)}</strong>
+          </div>
+        `).join('')}
+      </div>
+      <div class="profile-section">
+        <h4>Equipo</h4>
+        <div class="profile-equipment-list">
+          ${equipmentHtml}
+        </div>
+      </div>
+    `;
+
+    characterProfileBody.innerHTML = html;
+  } catch (error) {
+    characterProfileBody.innerHTML = `
+      <div class="profile-empty-state">
+        <h3>No se pudo cargar el perfil</h3>
+        <p>${escapeHtml(error?.message || 'No se pudo consultar la información del personaje.')}</p>
+      </div>
+    `;
+  }
+}
+
 function renderMemberListFilters() {
   if (!memberListClassFilter || !memberListForceFilter) {
     return;
@@ -1068,7 +1212,7 @@ function createMemberCard(member) {
   return `
     <div class="member-slot">
       <div class="member-info">
-        <span class="member-name">${escapeHtml(member.name)}</span>
+        <button class="member-name-trigger" type="button" data-member-id="${member.id}">${escapeHtml(member.name)}</button>
         <span class="member-class" style="color: ${meta.color};"><img class="class-icon" src="${meta.iconUrl || ''}" alt="${member.className}" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';" /><span class="class-icon-fallback" style="display:none; color: ${meta.color}">${meta.icon}</span> ${member.className}</span>
         <span class="member-class">iLvl: ${formatStatValue(member.ilevel)} / CP: ${formatStatValue(member.cp)}</span>
       </div>
@@ -1130,6 +1274,10 @@ function renderRoster() {
       });
       deletePartyBtn.disabled = !isStaffRole();
       deletePartyBtn.addEventListener('click', () => clearParty(force.id, party.id));
+
+      memberList.querySelectorAll('.member-name-trigger').forEach((button) => {
+        button.addEventListener('click', () => openCharacterProfileModal(button.dataset.memberId));
+      });
 
       memberList.querySelectorAll('.member-delete').forEach((button) => {
         button.addEventListener('click', () => deleteMember(force.id, party.id, button.dataset.memberId));
@@ -1362,7 +1510,7 @@ function renderGlobalMembers() {
             <img class="class-icon" src="${meta.iconUrl || ''}" alt="${member.className}" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';" />
             <span class="class-icon-fallback" style="display:none; color: ${meta.color}">${meta.icon}</span>
             <div>
-                <strong style="color: ${meta.color};">${escapeHtml(member.name)}</strong>
+                <button class="member-name-trigger" type="button" data-member-id="${member.id}" style="color: ${meta.color};">${escapeHtml(member.name)}</button>
                 <small>${member.partyName}</small>
             </div>
           </div>
@@ -1383,6 +1531,10 @@ function renderGlobalMembers() {
       `;
     })
     .join('');
+
+  globalMemberList.querySelectorAll('.member-name-trigger').forEach((button) => {
+    button.addEventListener('click', () => openCharacterProfileModal(button.dataset.memberId));
+  });
 
   globalMemberList.querySelectorAll('.global-member-delete').forEach((button) => {
     button.addEventListener('click', () => deleteMemberById(button.dataset.memberId));
@@ -1790,6 +1942,10 @@ document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape' && addMemberModal.classList.contains('active')) {
     toggleMemberModal(false);
   }
+
+  if (event.key === 'Escape' && characterProfileModal && characterProfileModal.classList.contains('active')) {
+    closeCharacterProfileModal();
+  }
 });
 memberClassSelect.innerHTML = CLASSES.map((cls) => `<option value="${cls}">${cls}</option>`).join('');
 memberClassSelect.value = CLASSES[0];
@@ -1803,6 +1959,10 @@ saveNcApiBaseBtn?.addEventListener('click', () => {
   }
   setNcApiBase(ncApiBaseInput?.value || NC_DEFAULT_API_BASE);
   setSyncStatus(`API guardada: ${getNcApiBase()}`, 'ok');
+});
+
+toggleNcConfigBtn?.addEventListener('click', () => {
+  toggleNcConfigPanel();
 });
 
 ncRegionSelect?.addEventListener('change', (event) => {
