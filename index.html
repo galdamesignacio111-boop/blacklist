@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Blacklist</title>
+    <script>
+      window.BLACKLIST_APP_CONFIG = window.BLACKLIST_APP_CONFIG || {
+        ncApiBase: ''
+      };
+    </script>
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -118,7 +123,7 @@
           <div class="nc-sync-bar">
             <label class="member-list-search">
               <span>API NC Proxy</span>
-              <input id="ncApiBaseInput" type="url" placeholder="http://localhost:8787" />
+              <input id="ncApiBaseInput" type="url" placeholder="https://tu-backend.example.com" />
             </label>
             <label class="member-list-search">
               <span>Región Preferida</span>

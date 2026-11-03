@@ -110,6 +110,11 @@ http://localhost:8788/health
    - `JWT_SECRET`
    - `CORS_ORIGIN` (tu dominio de Netlify)
    - `STAFF_PASSWORD`
+4. En la app desplegada, abre la sección "Lista de miembros" y configura `API NC Proxy` con la URL pública del backend/proxy real, por ejemplo:
+   - `https://tu-backend-production.onrender.com`
+   - `https://tu-proxy-production.up.railway.app`
+
+No uses `http://localhost:8787` en Netlify: ese puerto solo existe en tu máquina local. La app ya no fuerza esa URL por defecto en producción.
 
 Con eso ya tienes una arquitectura funcional de app real (frontend + backend + BD).
 

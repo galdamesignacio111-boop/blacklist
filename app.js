@@ -3,7 +3,7 @@ const THEME_KEY = 'aion2-party-theme';
 const AUTH_ROLE_KEY = 'aion2-party-role';
 const NC_API_BASE_KEY = 'aion2-party-nc-api-base';
 const NC_REGION_KEY = 'aion2-party-nc-region';
-const NC_DEFAULT_API_BASE = 'http://localhost:8787';
+const NC_DEFAULT_API_BASE = (window.BLACKLIST_APP_CONFIG?.ncApiBase || '').replace(/\/+$|\s+$/g, '');
 const MARKET_DEFAULT_URL = 'https://aion2.exchange';
 const STAFF_PASSWORD = 'blacklist2026';
 const NC_REGIONS = ['la', 'nae', 'naw', 'eu', 'as'];
@@ -442,14 +442,15 @@ function initTheme() {
 
 function getNcApiBase() {
   const stored = localStorage.getItem(NC_API_BASE_KEY);
-  return (stored || NC_DEFAULT_API_BASE).replace(/\/+$/, '');
+  const candidate = stored || NC_DEFAULT_API_BASE || window.BLACKLIST_APP_CONFIG?.ncApiBase || '';
+  return candidate.replace(/\/+$/, '');
 }
 
 function setNcApiBase(url) {
   const normalized = (url || '').trim().replace(/\/+$/, '');
-  localStorage.setItem(NC_API_BASE_KEY, normalized || NC_DEFAULT_API_BASE);
+  localStorage.setItem(NC_API_BASE_KEY, normalized || '');
   if (ncApiBaseInput) {
-    ncApiBaseInput.value = localStorage.getItem(NC_API_BASE_KEY) || NC_DEFAULT_API_BASE;
+    ncApiBaseInput.value = localStorage.getItem(NC_API_BASE_KEY) || NC_DEFAULT_API_BASE || '';
   }
 }
 
@@ -635,6 +636,10 @@ function findMemberRefById(memberId) {
 
 function buildNcProfileUrl(member) {
   const base = getNcApiBase();
+  if (!base) {
+    throw new Error('Configura la API NC Proxy antes de sincronizar.');
+  }
+
   const params = new URLSearchParams({
     region: member.ncRegion,
     serverId: member.ncServerId,
@@ -645,6 +650,10 @@ function buildNcProfileUrl(member) {
 
 function buildNcResolveUrl(memberName) {
   const base = getNcApiBase();
+  if (!base) {
+    throw new Error('Configura la API NC Proxy antes de sincronizar.');
+  }
+
   const params = new URLSearchParams({ name: memberName });
   const region = getNcPreferredRegion();
   if (region !== 'all') {
