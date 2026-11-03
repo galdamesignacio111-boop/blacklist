@@ -513,15 +513,6 @@ function setNcPreferredRegion(region) {
   }
 }
 
-function setSyncStatus(message, type = '') {
-  if (!syncStatusText) return;
-  syncStatusText.textContent = message;
-  syncStatusText.classList.remove('busy', 'ok', 'error');
-  if (type) {
-    syncStatusText.classList.add(type);
-  }
-}
-
 function toggleNcConfigPanel(forceOpen) {
   if (!toggleNcConfigBtn || !ncConfigPanel) return;
 
@@ -983,14 +974,15 @@ function renderForceSelect() {
   });
 
   if (!options.length) {
-    forceSelect.disabled = true;
-    partySelect.disabled = true;
-    moveForceSelect.disabled = true;
-    movePartySelect.disabled = true;
+    if (forceSelect) forceSelect.disabled = true;
+    if (partySelect) partySelect.disabled = true;
+    if (moveForceSelect) moveForceSelect.disabled = true;
+    if (movePartySelect) movePartySelect.disabled = true;
     return;
   }
 
-  renderPartySelect(forceSelect.value || options[0].id);
+  const baseForceId = forceSelect?.value || options[0].id;
+  renderPartySelect(baseForceId);
   renderMovePartySelect(moveForceSelect.value === 'all' ? options[0].id : (moveForceSelect.value || options[0].id));
 }
 
@@ -1043,7 +1035,9 @@ function updateSummary() {
       const membersCount = force.parties.reduce((sum, party) => sum + party.members.length, 0);
       return `
         <div class="force-badge">
-          <h3>${force.name}</h3>
+          <div class="force-badge-header">
+            <span>${force.name}</span>
+          </div>
           <strong>${membersCount}</strong>
         </div>
       `;
@@ -1059,6 +1053,18 @@ function closeCharacterProfileModal() {
 
   if (characterProfileBody) {
     characterProfileBody.innerHTML = '';
+  }
+}
+
+function setSyncStatus(message, type = '') {
+  if (!syncStatusText) return;
+  syncStatusText.textContent = message;
+  syncStatusText.classList.remove('busy', 'ok', 'error', 'loading');
+  if (type) {
+    syncStatusText.classList.add(type);
+  }
+  if (type === 'busy') {
+    syncStatusText.classList.add('loading');
   }
 }
 
@@ -1099,29 +1105,29 @@ async function openCharacterProfileModal(memberId) {
     const externalProfileUrl = `https://aion2.plaync.com/en-us/characters/${encodeURIComponent(summary.serverId || targetMember.ncServerId)}/${encodeURIComponent(summary.characterId || targetMember.ncCharacterId)}?region=${encodeURIComponent((summary.region || targetMember.ncRegion || 'la').toLowerCase())}`;
 
     const statCards = [
-      ['Clase', summary.className || targetMember.className || '—'],
-      ['Nivel', summary.level ? String(summary.level) : '—'],
-      ['iLvl', summary.il ? formatStatValue(summary.il) : formatStatValue(targetMember.ilevel)],
+      ['CLASS', summary.className || targetMember.className || '—'],
+      ['LEVEL', summary.level ? String(summary.level) : '—'],
+      ['ITEM LEVEL', summary.il ? formatStatValue(summary.il) : formatStatValue(targetMember.ilevel)],
       ['CP', summary.cp ? formatStatValue(summary.cp) : formatStatValue(targetMember.cp)],
-      ['Servidor', serverName],
-      ['Región', `${regionLabel} • ${serverName}`],
+      ['SERVER', serverName],
+      ['REGION', `${regionLabel} • ${serverName}`],
     ];
 
     const equipmentHtml = equipEntries.length
       ? equipEntries.slice(0, 8).map((item) => {
-          const name = item?.itemName || item?.name || item?.slotName || item?.slot || 'Equipo';
-          const slot = item?.slotName || item?.slot || 'Equipo';
+          const name = item?.itemName || item?.name || item?.slotName || item?.slot || 'Equipment';
+          const slot = item?.slotName || item?.slot || 'Equipment';
           return `<div class="profile-equipment-item"><span>${escapeHtml(slot)}</span><strong>${escapeHtml(name)}</strong></div>`;
         }).join('')
-      : '<div class="profile-empty">Sin datos de equipo disponibles.</div>';
+      : '<div class="profile-empty">No equipment data available.</div>';
 
     const html = `
       <div class="profile-header">
         <div class="profile-title-wrap">
           <span class="profile-kicker">${escapeHtml(regionLabel)} • ${escapeHtml(serverName)}</span>
-          <h3>${escapeHtml(summary.characterName || targetMember.name || 'Personaje')}</h3>
+          <h3>${escapeHtml(summary.characterName || targetMember.name || 'Character')}</h3>
         </div>
-        <a class="profile-link" href="${externalProfileUrl}" target="_blank" rel="noreferrer">Abrir en AION NC</a>
+        <a class="profile-link" href="${externalProfileUrl}" target="_blank" rel="noreferrer">Open in AION NC</a>
       </div>
       <div class="profile-grid">
         ${statCards.map(([label, value]) => `
@@ -1132,7 +1138,7 @@ async function openCharacterProfileModal(memberId) {
         `).join('')}
       </div>
       <div class="profile-section">
-        <h4>Equipo</h4>
+        <h4>EQUIPMENT</h4>
         <div class="profile-equipment-list">
           ${equipmentHtml}
         </div>
@@ -1143,8 +1149,8 @@ async function openCharacterProfileModal(memberId) {
   } catch (error) {
     characterProfileBody.innerHTML = `
       <div class="profile-empty-state">
-        <h3>No se pudo cargar el perfil</h3>
-        <p>${escapeHtml(error?.message || 'No se pudo consultar la información del personaje.')}</p>
+        <h3>Could not load profile</h3>
+        <p>${escapeHtml(error?.message || 'The character information could not be loaded.')}</p>
       </div>
     `;
   }
@@ -1826,7 +1832,7 @@ function addMember(event) {
     return;
   }
 
-  const forceId = forceSelect.value;
+  const forceId = forceSelect?.value || state.forces[0]?.id || null;
   const partyId = partySelect.value;
   const name = memberNameInput.value.trim();
   const className = memberClassSelect.value;
@@ -1893,7 +1899,7 @@ function render() {
   renderRoster();
 }
 
-forceSelect.addEventListener('change', (event) => {
+forceSelect?.addEventListener('change', (event) => {
   renderPartySelect(event.target.value);
 });
 
@@ -1938,6 +1944,12 @@ moveMemberBtn.addEventListener('click', () => {
 });
 
 memberForm.addEventListener('submit', addMember);
+closeCharacterProfileModalBtn?.addEventListener('click', closeCharacterProfileModal);
+characterProfileModal?.addEventListener('click', (event) => {
+  if (event.target instanceof HTMLElement && event.target.dataset.closeProfileModal === 'true') {
+    closeCharacterProfileModal();
+  }
+});
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape' && addMemberModal.classList.contains('active')) {
     toggleMemberModal(false);

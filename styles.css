@@ -122,6 +122,7 @@ body[data-role="staff"] .role-badge {
   grid-template-columns: repeat(8, minmax(90px, 1fr));
   gap: 12px;
   margin: 18px 0 16px;
+  padding: 6px 0 0;
 }
 
 .member-list-class-summary {
@@ -130,18 +131,19 @@ body[data-role="staff"] .role-badge {
 }
 
 .guild-class-chip {
-  background: rgba(10, 16, 25, 0.7);
+  background: rgba(10, 16, 25, 0.72);
   border: 1px solid rgba(157, 171, 210, 0.18);
   border-radius: 14px;
-  padding: 10px 10px 9px;
+  padding: 12px 10px 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 5px;
   color: var(--text);
   cursor: pointer;
   transition: all 0.2s ease;
+  min-height: 104px;
 }
 
 .chip-icon {
@@ -435,30 +437,48 @@ select:focus {
   color: var(--success);
   border: 1px solid rgba(115, 228, 168, 0.22);
   font-size: 0.8rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .force-summary {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px;
+  margin-top: 18px;
 }
 
 .force-badge {
-  min-width: 120px;
-  padding: 12px 14px;
-  background: rgba(247, 199, 107, 0.08);
-  border: 1px solid rgba(247, 199, 107, 0.25);
-  border-radius: 12px;
+  min-height: 96px;
+  padding: 14px 16px;
+  background: rgba(22, 27, 38, 0.8);
+  border: 1px solid rgba(164, 176, 215, 0.18);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
 }
 
-.force-badge h3 {
-  font-size: 0.82rem;
+.force-badge-header {
   color: var(--muted);
-  margin-bottom: 5px;
+  font-size: 0.73rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
 }
 
 .force-badge strong {
-  font-size: 1.2rem;
+  font-size: 2.1rem;
+  line-height: 1;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.overview-panel .guild-class-summary {
+  margin-top: 18px;
+  margin-bottom: 12px;
 }
 
 .member-toolbar {
@@ -500,12 +520,30 @@ select:focus {
   min-height: 40px;
   display: inline-flex;
   align-items: center;
+  gap: 8px;
   border: 1px solid rgba(163, 175, 216, 0.16);
   border-radius: 10px;
   padding: 0.55rem 0.75rem;
   color: var(--muted);
   background: rgba(9, 13, 21, 0.6);
   font-size: 0.78rem;
+}
+
+.sync-status.loading::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid rgba(158, 195, 255, 0.4);
+  border-top-color: #9fc6ff;
+  display: inline-block;
+  animation: syncPulse 0.9s linear infinite;
+}
+
+@keyframes syncPulse {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .sync-status.busy {
