@@ -27,53 +27,54 @@
         </div>
 
         <div class="auth-strip">
-          <span id="currentRoleBadge" class="role-badge">Viewer</span>
-          <button id="staffLoginBtn" class="secondary-btn" type="button">Entrar Staff</button>
-          <button id="staffLogoutBtn" class="secondary-btn" type="button">Salir</button>
+          <button id="languageToggleBtn" class="icon-btn" type="button" aria-label="Toggle language" title="Cambiar idioma">🌐</button>
+          <span id="currentRoleBadge" class="role-badge" data-i18n="viewerBadge">Viewer</span>
+          <button id="staffLoginBtn" class="secondary-btn" type="button" data-i18n="staffLogin">Entrar Staff</button>
+          <button id="staffLogoutBtn" class="secondary-btn" type="button" data-i18n="staffLogout">Salir</button>
         </div>
       </header>
 
       <nav class="view-switcher" aria-label="Vistas">
-        <button class="view-btn active" type="button" data-view="force">Force Manager</button>
-        <button class="view-btn" type="button" data-view="members">Lista de miembros</button>
-        <button class="view-btn" type="button" data-view="market">Market</button>
+        <button class="view-btn active" type="button" data-view="force" data-i18n="navForce">Force Manager</button>
+        <button class="view-btn" type="button" data-view="members" data-i18n="navMembers">Lista de miembros</button>
+        <button class="view-btn" type="button" data-view="market" data-i18n="navMarket">Market</button>
       </nav>
 
       <section id="forceManagerView" class="view-panel active">
         <main class="layout">
           <section class="panel form-panel">
-            <h2>Buscar y mover miembro</h2>
+            <h2 data-i18n="sectionFindMove">Buscar y mover miembro</h2>
             <div class="search-move-panel">
               <label>
-                <span>Buscar persona</span>
-                <input id="memberSearchInput" type="text" maxlength="30" placeholder="Escribe nombre" />
+                <span data-i18n="searchMemberLabel">Buscar persona</span>
+                <input id="memberSearchInput" type="text" maxlength="30" data-i18n-placeholder="searchMemberPlaceholder" placeholder="Escribe nombre" />
               </label>
 
               <div id="memberSearchResults" class="member-search-results"></div>
 
               <div class="field-row">
                 <label>
-                  <span>Fuerza</span>
+                  <span data-i18n="forceLabel">Fuerza</span>
                   <select id="moveForceSelect"></select>
                 </label>
                 <label>
-                  <span>Party</span>
+                  <span data-i18n="partyLabel">Party</span>
                   <select id="movePartySelect"></select>
                 </label>
               </div>
 
               <div class="field-row">
-                <button id="moveMemberBtn" class="primary-btn" type="button">Mover a party</button>
+                <button id="moveMemberBtn" class="primary-btn" type="button" data-i18n="moveMemberBtn">Mover a party</button>
               </div>
             </div>
           </section>
 
           <section class="panel overview-panel">
             <div class="stats-head">
-              <h2>Resumen</h2>
-              <button id="addForceBtn" class="secondary-btn" type="button">+ Agregar fuerza</button>
+              <h2 data-i18n="summaryTitle">Resumen</h2>
+              <button id="addForceBtn" class="secondary-btn" type="button" data-i18n="addForceBtn">+ Agregar fuerza</button>
             </div>
-            <div class="stat-pill"><strong id="summaryTotalMembers">0</strong> miembros</div>
+            <div class="stat-pill"><strong id="summaryTotalMembers">0</strong> <span data-i18n="membersLabel">miembros</span></div>
             <div id="guildClassSummary" class="guild-class-summary" aria-label="Clases de la guild"></div>
             <div class="force-summary" id="forceSummary"></div>
           </section>
@@ -81,7 +82,7 @@
 
         <section class="roster-section">
           <div class="section-head">
-            <h2>Roster por fuerza</h2>
+            <h2 data-i18n="rosterTitle">Roster por fuerza</h2>
           </div>
           <div id="rosterContainer" class="roster-container"></div>
         </section>
@@ -90,32 +91,32 @@
       <section id="memberListView" class="view-panel" aria-live="polite">
         <section class="panel global-list-panel">
           <div class="stats-head">
-            <h2>Lista de miembros</h2>
+            <h2 data-i18n="memberListTitle">Lista de miembros</h2>
             <div class="stat-pill"><strong id="globalTotalMembers">0/128</strong></div>
           </div>
 
           <div class="member-toolbar">
-            <button id="openAddMemberBtn" class="primary-btn" type="button">+ Agregar miembro</button>
-            <button id="syncAllStatsBtn" class="secondary-btn" type="button">Sync iLvl/CP (NC)</button>
+            <button id="openAddMemberBtn" class="primary-btn" type="button" data-i18n="addMemberBtn">+ Agregar miembro</button>
+            <button id="syncAllStatsBtn" class="secondary-btn" type="button" data-i18n="syncNcBtn">Sync iLvl/CP (NC)</button>
             <label class="member-list-search">
-              <span>Buscar miembro</span>
-              <input id="memberListSearchInput" type="text" maxlength="30" placeholder="Escribe un nombre" />
+              <span data-i18n="searchMemberListLabel">Buscar miembro</span>
+              <input id="memberListSearchInput" type="text" maxlength="30" data-i18n-placeholder="searchMemberListPlaceholder" placeholder="Escribe un nombre" />
             </label>
             <label class="member-list-search">
-              <span>Clase</span>
+              <span data-i18n="classLabel">Clase</span>
               <select id="memberListClassFilter"></select>
             </label>
             <label class="member-list-search">
-              <span>Fuerza</span>
+              <span data-i18n="forceLabelSecondary">Fuerza</span>
               <select id="memberListForceFilter"></select>
             </label>
             <label class="member-list-search">
-              <span>Orden</span>
+              <span data-i18n="sortLabel">Orden</span>
               <select id="memberListSort">
-                <option value="name-asc">Nombre (A-Z)</option>
-                <option value="name-desc">Nombre (Z-A)</option>
-                <option value="ilevel-desc">iLvl (alto-bajo)</option>
-                <option value="cp-desc">CP (alto-bajo)</option>
+                <option value="name-asc" data-i18n="sortNameAsc">Nombre (A-Z)</option>
+                <option value="name-desc" data-i18n="sortNameDesc">Nombre (Z-A)</option>
+                <option value="ilevel-desc" data-i18n="sortIlevel">iLvl (alto-bajo)</option>
+                <option value="cp-desc" data-i18n="sortCp">CP (alto-bajo)</option>
               </select>
             </label>
           </div>
@@ -127,22 +128,22 @@
           <div id="ncConfigPanel" class="nc-config-panel collapsed" aria-hidden="true">
             <div class="nc-sync-bar">
               <label class="member-list-search">
-                <span>API NC Proxy</span>
+                <span data-i18n="ncApiProxyLabel">API NC Proxy</span>
                 <input id="ncApiBaseInput" type="url" placeholder="https://tu-backend.example.com" />
               </label>
               <label class="member-list-search">
-                <span>Región Preferida</span>
+                <span data-i18n="preferredRegionLabel">Región Preferida</span>
                 <select id="ncRegionSelect">
-                  <option value="all">Todas</option>
-                  <option value="la">Sudamérica (LA)</option>
-                  <option value="eu">Europa (EU)</option>
-                  <option value="nae">NA East</option>
-                  <option value="naw">NA West</option>
-                  <option value="as">Asia</option>
+                  <option value="all" data-i18n="allRegionsOption">Todas</option>
+                  <option value="la" data-i18n="regionLa">Sudamérica (LA)</option>
+                  <option value="eu" data-i18n="regionEu">Europa (EU)</option>
+                  <option value="nae" data-i18n="regionNae">NA East</option>
+                  <option value="naw" data-i18n="regionNaw">NA West</option>
+                  <option value="as" data-i18n="regionAs">Asia</option>
                 </select>
               </label>
-              <button id="saveNcApiBaseBtn" class="secondary-btn" type="button">Guardar config</button>
-              <p id="syncStatusText" class="sync-status">Sin sincronizar</p>
+              <button id="saveNcApiBaseBtn" class="secondary-btn" type="button" data-i18n="saveNcConfigBtn">Guardar config</button>
+              <p id="syncStatusText" class="sync-status" data-i18n="syncStatusIdle">Sin sincronizar</p>
             </div>
           </div>
 
@@ -176,28 +177,28 @@
       <div class="modal-backdrop" data-close-modal="true"></div>
       <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="addMemberTitle">
         <div class="modal-header">
-          <h2 id="addMemberTitle">Agregar miembro</h2>
+          <h2 id="addMemberTitle" data-i18n="addMemberTitle">Agregar miembro</h2>
           <button id="closeAddMemberModal" class="close-modal" type="button" aria-label="Cerrar">×</button>
         </div>
 
         <form id="memberForm" class="member-add-form">
           <div class="field-row single">
             <label>
-              <span>Party</span>
+              <span data-i18n="partyLabel">Party</span>
               <select id="partySelect" required></select>
             </label>
           </div>
 
           <div class="field-row single">
             <label>
-              <span>Nombre</span>
-              <input id="memberName" type="text" maxlength="20" placeholder="Ej: Akaris" required />
+              <span data-i18n="memberNameLabel">Nombre</span>
+              <input id="memberName" type="text" maxlength="20" data-i18n-placeholder="memberNamePlaceholder" placeholder="Ej: Akaris" required />
             </label>
           </div>
 
           <div class="field-row single">
             <label>
-              <span>Clase</span>
+              <span data-i18n="classLabel">Clase</span>
               <select id="memberClass" required>
                 <option value="Templar">Templar</option>
                 <option value="Assassin">Assassin</option>
@@ -213,18 +214,18 @@
 
           <div class="field-row">
             <label>
-              <span>iLvl</span>
-              <input id="memberIlevel" type="number" min="0" max="99999" placeholder="Ej: 3550" />
+              <span data-i18n="ilevelLabel">iLvl</span>
+              <input id="memberIlevel" type="number" min="0" max="99999" data-i18n-placeholder="ilevelPlaceholder" placeholder="Ej: 3550" />
             </label>
             <label>
-              <span>CP</span>
-              <input id="memberCp" type="number" min="0" max="999999" placeholder="Ej: 12400" />
+              <span data-i18n="cpLabel">CP</span>
+              <input id="memberCp" type="number" min="0" max="999999" data-i18n-placeholder="cpPlaceholder" placeholder="Ej: 12400" />
             </label>
           </div>
 
           <div class="modal-actions">
-            <button class="secondary-btn" type="button" data-close-modal="true">Cancelar</button>
-            <button class="primary-btn" type="submit">Guardar miembro</button>
+            <button class="secondary-btn" type="button" data-close-modal="true" data-i18n="cancelBtn">Cancelar</button>
+            <button class="primary-btn" type="submit" data-i18n="saveMemberBtn">Guardar miembro</button>
           </div>
         </form>
       </div>
@@ -234,7 +235,7 @@
       <div class="modal-backdrop" data-close-profile-modal="true"></div>
       <div class="modal-dialog profile-modal" role="dialog" aria-modal="true" aria-labelledby="characterProfileTitle">
         <div class="modal-header">
-          <h2 id="characterProfileTitle">Perfil del personaje</h2>
+          <h2 id="characterProfileTitle" data-i18n="profileTitle">Perfil del personaje</h2>
           <button id="closeCharacterProfileModal" class="close-modal" type="button" aria-label="Cerrar">×</button>
         </div>
         <div id="characterProfileBody" class="profile-modal-body"></div>

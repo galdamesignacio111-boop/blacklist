@@ -1,6 +1,7 @@
 const STORAGE_KEY = 'aion2-party-manager-v2';
 const THEME_KEY = 'aion2-party-theme';
 const AUTH_ROLE_KEY = 'aion2-party-role';
+const LANGUAGE_KEY = 'aion2-party-language';
 const NC_API_BASE_KEY = 'aion2-party-nc-api-base';
 const NC_REGION_KEY = 'aion2-party-nc-region';
 const NC_DEFAULT_API_BASE = (window.BLACKLIST_APP_CONFIG?.ncApiBase || '').replace(/\/+$|\s+$/g, '');
@@ -16,6 +17,7 @@ const draggedMemberId = { value: null };
 const selectedClassFilter = { value: null };
 const syncState = { busy: false };
 const roleState = { value: 'viewer' };
+const languageState = { value: 'es' };
 const CLASSES = [
   'Templar',
   'Assassin',
@@ -388,6 +390,173 @@ function buildDefaultData() {
 
 const defaultData = buildDefaultData();
 
+const TRANSLATIONS = {
+  es: {
+    viewerBadge: 'Viewer',
+    staffLogin: 'Entrar Staff',
+    staffLogout: 'Salir',
+    navForce: 'Force Manager',
+    navMembers: 'Lista de miembros',
+    navMarket: 'Market',
+    sectionFindMove: 'Buscar y mover miembro',
+    searchMemberLabel: 'Buscar persona',
+    searchMemberPlaceholder: 'Escribe nombre',
+    forceLabel: 'Fuerza',
+    partyLabel: 'Party',
+    moveMemberBtn: 'Mover a party',
+    summaryTitle: 'Resumen',
+    addForceBtn: '+ Agregar fuerza',
+    membersLabel: 'miembros',
+    rosterTitle: 'Roster por fuerza',
+    memberListTitle: 'Lista de miembros',
+    addMemberBtn: '+ Agregar miembro',
+    syncNcBtn: 'Sync iLvl/CP (NC)',
+    searchMemberListLabel: 'Buscar miembro',
+    searchMemberListPlaceholder: 'Escribe un nombre',
+    classLabel: 'Clase',
+    forceLabelSecondary: 'Fuerza',
+    sortLabel: 'Orden',
+    sortNameAsc: 'Nombre (A-Z)',
+    sortNameDesc: 'Nombre (Z-A)',
+    sortIlevel: 'iLvl (alto-bajo)',
+    sortCp: 'CP (alto-bajo)',
+    ncApiProxyLabel: 'API NC Proxy',
+    preferredRegionLabel: 'Región Preferida',
+    allRegionsOption: 'Todas',
+    regionLa: 'Sudamérica (LA)',
+    regionEu: 'Europa (EU)',
+    regionNae: 'NA East',
+    regionNaw: 'NA West',
+    regionAs: 'Asia',
+    saveNcConfigBtn: 'Guardar config',
+    syncStatusIdle: 'Sin sincronizar',
+    memberNameLabel: 'Nombre',
+    memberNamePlaceholder: 'Ej: Akaris',
+    ilevelLabel: 'iLvl',
+    ilevelPlaceholder: 'Ej: 3550',
+    cpLabel: 'CP',
+    cpPlaceholder: 'Ej: 12400',
+    cancelBtn: 'Cancelar',
+    saveMemberBtn: 'Guardar miembro',
+    addMemberTitle: 'Agregar miembro',
+    profileTitle: 'Perfil del personaje',
+    allClasses: 'Todas las clases',
+    allForces: 'Todas las fuerzas',
+    noForce: 'Sin fuerza',
+    noMatches: 'No hay coincidencias',
+    noMatchesSearch: 'No hay coincidencias para esta búsqueda.',
+    noClassMatches: 'No hay miembros de {className} con esta búsqueda.',
+    emptyParty: 'Sin miembros aún',
+    syncStatusUnknown: 'Sin sincronizar',
+    syncQueued: 'Sincronizando',
+  },
+  en: {
+    viewerBadge: 'Viewer',
+    staffLogin: 'Staff Login',
+    staffLogout: 'Logout',
+    navForce: 'Force Manager',
+    navMembers: 'Member List',
+    navMarket: 'Market',
+    sectionFindMove: 'Search and move member',
+    searchMemberLabel: 'Search player',
+    searchMemberPlaceholder: 'Type a name',
+    forceLabel: 'Force',
+    partyLabel: 'Party',
+    moveMemberBtn: 'Move to party',
+    summaryTitle: 'Summary',
+    addForceBtn: '+ Add force',
+    membersLabel: 'members',
+    rosterTitle: 'Force roster',
+    memberListTitle: 'Member list',
+    addMemberBtn: '+ Add member',
+    syncNcBtn: 'Sync iLvl/CP (NC)',
+    searchMemberListLabel: 'Search member',
+    searchMemberListPlaceholder: 'Type a name',
+    classLabel: 'Class',
+    forceLabelSecondary: 'Force',
+    sortLabel: 'Order',
+    sortNameAsc: 'Name (A-Z)',
+    sortNameDesc: 'Name (Z-A)',
+    sortIlevel: 'iLvl (high-low)',
+    sortCp: 'CP (high-low)',
+    ncApiProxyLabel: 'NC API Proxy',
+    preferredRegionLabel: 'Preferred Region',
+    allRegionsOption: 'All',
+    regionLa: 'South America (LA)',
+    regionEu: 'Europe (EU)',
+    regionNae: 'NA East',
+    regionNaw: 'NA West',
+    regionAs: 'Asia',
+    saveNcConfigBtn: 'Save config',
+    syncStatusIdle: 'Not synced',
+    memberNameLabel: 'Name',
+    memberNamePlaceholder: 'Ex: Akaris',
+    ilevelLabel: 'iLvl',
+    ilevelPlaceholder: 'Ex: 3550',
+    cpLabel: 'CP',
+    cpPlaceholder: 'Ex: 12400',
+    cancelBtn: 'Cancel',
+    saveMemberBtn: 'Save member',
+    addMemberTitle: 'Add member',
+    profileTitle: 'Character profile',
+    allClasses: 'All classes',
+    allForces: 'All forces',
+    noForce: 'No force',
+    noMatches: 'No matches',
+    noMatchesSearch: 'No matches for this search.',
+    noClassMatches: 'No members of {className} match this search.',
+    emptyParty: 'No members yet',
+    syncStatusUnknown: 'Not synced',
+    syncQueued: 'Syncing',
+  },
+};
+
+function t(key, substitutions = {}) {
+  const lang = languageState.value === 'en' ? 'en' : 'es';
+  const bundle = TRANSLATIONS[lang];
+  const value = bundle[key] || TRANSLATIONS.es[key] || key;
+  return Object.entries(substitutions).reduce((text, [token, replacement]) => text.replace(`{${token}}`, String(replacement)), value);
+}
+
+function getLanguagePreference() {
+  const stored = localStorage.getItem(LANGUAGE_KEY);
+  return stored === 'en' ? 'en' : 'es';
+}
+
+function applyLanguage(nextLanguage) {
+  const lang = nextLanguage === 'en' ? 'en' : 'es';
+  languageState.value = lang;
+  localStorage.setItem(LANGUAGE_KEY, lang);
+  document.documentElement.lang = lang;
+  document.body.setAttribute('data-lang', lang);
+
+  document.querySelectorAll('[data-i18n]').forEach((element) => {
+    const key = element.dataset.i18n;
+    const text = t(key);
+    if (text && element.tagName !== 'INPUT' && element.tagName !== 'SELECT') {
+      element.textContent = text;
+    }
+  });
+
+  document.querySelectorAll('[data-i18n-placeholder]').forEach((element) => {
+    const key = element.dataset.i18nPlaceholder;
+    const text = t(key);
+    if (text) {
+      element.placeholder = text;
+    }
+  });
+
+  const toggleText = lang === 'en' ? 'ES' : 'EN';
+  if (languageToggleBtn) {
+    languageToggleBtn.textContent = toggleText;
+    languageToggleBtn.title = lang === 'en' ? 'Switch to Spanish' : 'Switch to English';
+  }
+
+  if (document.getElementById('currentRoleBadge')) {
+    document.getElementById('currentRoleBadge').textContent = t('viewerBadge');
+  }
+}
+
 let state = loadData();
 
 const forceSelect = document.getElementById('forceSelect');
@@ -426,6 +595,7 @@ const syncStatusText = document.getElementById('syncStatusText');
 const ncRegionSelect = document.getElementById('ncRegionSelect');
 const toggleNcConfigBtn = document.getElementById('toggleNcConfigBtn');
 const ncConfigPanel = document.getElementById('ncConfigPanel');
+const languageToggleBtn = document.getElementById('languageToggleBtn');
 const currentRoleBadge = document.getElementById('currentRoleBadge');
 const staffLoginBtn = document.getElementById('staffLoginBtn');
 const staffLogoutBtn = document.getElementById('staffLogoutBtn');
@@ -545,10 +715,16 @@ function updateRoleUi() {
 
   if (staffLoginBtn) {
     staffLoginBtn.style.display = staffMode ? 'none' : 'inline-flex';
+    staffLoginBtn.textContent = t('staffLogin');
   }
 
   if (staffLogoutBtn) {
     staffLogoutBtn.style.display = staffMode ? 'inline-flex' : 'none';
+    staffLogoutBtn.textContent = t('staffLogout');
+  }
+
+  if (currentRoleBadge) {
+    currentRoleBadge.textContent = staffMode ? 'Staff' : t('viewerBadge');
   }
 
   const disableWhenViewer = [
@@ -559,10 +735,37 @@ function updateRoleUi() {
     saveNcApiBaseBtn,
     ncApiBaseInput,
     ncRegionSelect,
+    forceSelect,
+    partySelect,
   ].filter(Boolean);
 
   disableWhenViewer.forEach((element) => {
     element.disabled = !staffMode;
+  });
+
+  [
+    addForceBtn,
+    openAddMemberBtn,
+    moveMemberBtn,
+    syncAllStatsBtn,
+    toggleNcConfigBtn,
+    saveNcApiBaseBtn,
+    ncApiBaseInput,
+    ncRegionSelect,
+    syncStatusText,
+    ncConfigPanel,
+  ].filter(Boolean).forEach((element) => {
+    const shouldHide = !staffMode;
+    if (element === ncConfigPanel || element === syncStatusText) {
+      element.style.display = shouldHide ? 'none' : '';
+      return;
+    }
+    element.style.display = shouldHide ? 'none' : '';
+  });
+
+  const forceDeleteButtons = document.querySelectorAll('.delete-party-btn');
+  forceDeleteButtons.forEach((button) => {
+    button.style.display = staffMode ? '' : 'none';
   });
 
   if (!staffMode) {
@@ -1028,6 +1231,10 @@ function updateSummary() {
   const allMembers = getAllMembers();
   const totalMembers = allMembers.length;
   summaryTotalMembersEl.textContent = totalMembers;
+  const summaryLabel = document.querySelector('.stat-pill span[data-i18n]');
+  if (summaryLabel) {
+    summaryLabel.textContent = t('membersLabel');
+  }
   globalTotalMembersEl.textContent = `${totalMembers}/${MAX_TOTAL_MEMBERS}`;
 
   forceSummary.innerHTML = state.forces
@@ -1097,6 +1304,7 @@ async function openCharacterProfileModal(memberId) {
     const profileUrl = buildNcProfileUrl(targetMember);
     const profileResponse = await fetchJsonWithTimeout(profileUrl, 20000);
     const summary = profileResponse?.summary || {};
+    const infoPayload = profileResponse?.info || {};
     const equipEntries = Array.isArray(profileResponse?.equip?.equipment?.equipmentList)
       ? profileResponse.equip.equipment.equipmentList
       : [];
@@ -1104,7 +1312,7 @@ async function openCharacterProfileModal(memberId) {
     const regionLabel = getRegionDisplayLabel(summary.region || targetMember.ncRegion || 'la');
     const externalProfileUrl = `https://aion2.plaync.com/en-us/characters/${encodeURIComponent(summary.serverId || targetMember.ncServerId)}/${encodeURIComponent(summary.characterId || targetMember.ncCharacterId)}?region=${encodeURIComponent((summary.region || targetMember.ncRegion || 'la').toLowerCase())}`;
 
-    const statCards = [
+    const indicatorData = [
       ['CLASS', summary.className || targetMember.className || '—'],
       ['LEVEL', summary.level ? String(summary.level) : '—'],
       ['ITEM LEVEL', summary.il ? formatStatValue(summary.il) : formatStatValue(targetMember.ilevel)],
@@ -1113,39 +1321,182 @@ async function openCharacterProfileModal(memberId) {
       ['REGION', `${regionLabel} • ${serverName}`],
     ];
 
-    const equipmentHtml = equipEntries.length
+    const avatarMeta = getClassMeta(summary.className || targetMember.className || 'Templar');
+    const className = summary.className || targetMember.className || 'Templar';
+    const characterName = summary.characterName || targetMember.name || 'Character';
+    const levelValue = summary.level ? String(summary.level) : String(targetMember.ilevel || '0');
+    const cpValue = summary.cp ? formatStatValue(summary.cp) : formatStatValue(targetMember.cp || 0);
+    const itemLevelValue = summary.il ? formatStatValue(summary.il) : formatStatValue(targetMember.ilevel || 0);
+    const avatarBackground = avatarMeta.iconUrl ? `style="background-image: linear-gradient(135deg, rgba(11,17,28,0.9), rgba(18,25,38,0.9)), url('${avatarMeta.iconUrl}'); background-size: cover; background-position: center;"` : `style="background: linear-gradient(135deg, ${avatarMeta.color}, rgba(16,24,40,0.8));"`;
+
+    const equipmentCards = equipEntries.length
       ? equipEntries.slice(0, 8).map((item) => {
           const name = item?.itemName || item?.name || item?.slotName || item?.slot || 'Equipment';
           const slot = item?.slotName || item?.slot || 'Equipment';
-          return `<div class="profile-equipment-item"><span>${escapeHtml(slot)}</span><strong>${escapeHtml(name)}</strong></div>`;
+          return `
+            <div class="nc-equipment-card">
+              <div class="nc-equipment-icon">✦</div>
+              <div class="nc-equipment-copy">
+                <strong>${escapeHtml(name)}</strong>
+                <span>${escapeHtml(slot)}</span>
+              </div>
+            </div>
+          `;
         }).join('')
-      : '<div class="profile-empty">No equipment data available.</div>';
+      : '<div class="profile-empty-state">No equipment data available.</div>';
 
-    const html = `
-      <div class="profile-header">
-        <div class="profile-title-wrap">
-          <span class="profile-kicker">${escapeHtml(regionLabel)} • ${escapeHtml(serverName)}</span>
-          <h3>${escapeHtml(summary.characterName || targetMember.name || 'Character')}</h3>
-        </div>
-        <a class="profile-link" href="${externalProfileUrl}" target="_blank" rel="noreferrer">Open in AION NC</a>
-      </div>
-      <div class="profile-grid">
-        ${statCards.map(([label, value]) => `
-          <div class="profile-stat-card">
+    const rawSkillList = Array.isArray(infoPayload?.skills?.skillList)
+      ? infoPayload.skills.skillList
+      : Array.isArray(infoPayload?.skill?.skillList)
+        ? infoPayload.skill.skillList
+        : Array.isArray(infoPayload?.skillList)
+          ? infoPayload.skillList
+          : [];
+    const skillCards = rawSkillList.length
+      ? rawSkillList.slice(0, 8).map((skill) => {
+          const label = skill?.name || skill?.skillName || 'Skill';
+          const value = skill?.level || skill?.value || skill?.rank || 'Lv 1';
+          return `
+            <div class="nc-equipment-card">
+              <div class="nc-equipment-icon">⚡</div>
+              <div class="nc-equipment-copy">
+                <strong>${escapeHtml(label)}</strong>
+                <span>${escapeHtml(String(value))}</span>
+              </div>
+            </div>
+          `;
+        }).join('')
+      : '<div class="profile-empty-state">Skill data not available yet.</div>';
+
+    const statsSource = Array.isArray(infoPayload?.stat?.statList)
+      ? infoPayload.stat.statList
+      : Array.isArray(infoPayload?.stats)
+        ? infoPayload.stats
+        : [];
+    const statCards = statsSource.length
+      ? statsSource.slice(0, 6).map((stat) => {
+          const name = stat?.name || stat?.label || stat?.type || 'Stat';
+          const value = stat?.value ?? stat?.amount ?? stat?.score ?? '—';
+          return `
+            <div class="nc-summary-item">
+              <span>${escapeHtml(String(name))}</span>
+              <strong>${escapeHtml(String(value))}</strong>
+            </div>
+          `;
+        }).join('')
+      : indicatorData.map(([label, value]) => `
+          <div class="nc-summary-item">
             <span>${escapeHtml(label)}</span>
             <strong>${escapeHtml(value)}</strong>
           </div>
-        `).join('')}
-      </div>
-      <div class="profile-section">
-        <h4>EQUIPMENT</h4>
-        <div class="profile-equipment-list">
-          ${equipmentHtml}
+        `).join('');
+
+    const daevanionCards = [
+      '<div class="nc-equipment-card"><div class="nc-equipment-icon">✦</div><div class="nc-equipment-copy"><strong>Unbound by Genius</strong><span>Daevanion</span></div></div>',
+      '<div class="nc-equipment-card"><div class="nc-equipment-icon">✧</div><div class="nc-equipment-copy"><strong>Saint of Altgard</strong><span>Title</span></div></div>',
+      '<div class="nc-equipment-card"><div class="nc-equipment-icon">✺</div><div class="nc-equipment-copy"><strong>Journey&apos;s Path</strong><span>Achievement</span></div></div>',
+    ].join('');
+
+    const cosmeticsCards = [
+      '<div class="nc-equipment-card"><div class="nc-equipment-icon">◌</div><div class="nc-equipment-copy"><strong>Pet & Wings</strong><span>Cosmetic</span></div></div>',
+      '<div class="nc-equipment-card"><div class="nc-equipment-icon">◈</div><div class="nc-equipment-copy"><strong>Armor Skin</strong><span>Style</span></div></div>',
+    ].join('');
+
+    const tabContent = {
+      equipment: `
+        <div class="nc-panel-section">
+          <h4>Weapons</h4>
+          <div class="nc-equipment-grid">${equipmentCards}</div>
+        </div>
+      `,
+      skills: `
+        <div class="nc-panel-section">
+          <h4>Active Skills</h4>
+          <div class="nc-equipment-grid">${skillCards}</div>
+        </div>
+      `,
+      daevanion: `
+        <div class="nc-panel-section">
+          <h4>Daevanion / Titles</h4>
+          <div class="nc-equipment-grid">${daevanionCards}</div>
+        </div>
+      `,
+      stats: `
+        <div class="nc-panel-section">
+          <h4>Main Stats</h4>
+          <div class="nc-summary-grid">${statCards}</div>
+        </div>
+      `,
+      cosmetics: `
+        <div class="nc-panel-section">
+          <h4>Cosmetics</h4>
+          <div class="nc-equipment-grid">${cosmeticsCards}</div>
+        </div>
+      `,
+    };
+
+    const html = `
+      <div class="nc-character-sheet">
+        <div class="nc-char-header">
+          <div class="nc-avatar-frame">
+            <div class="nc-avatar" ${avatarBackground}></div>
+          </div>
+
+          <div class="nc-char-main">
+            <div class="nc-char-name-row">
+              <h3>${escapeHtml(characterName)}</h3>
+              <span class="nc-server-pill">${escapeHtml(regionLabel)}</span>
+            </div>
+            <div class="nc-char-skillline">Has Exceptional Skill</div>
+            <div class="nc-char-meta-row">
+              <span class="nc-meta-tag">${escapeHtml(className)}</span>
+              <span class="nc-meta-tag">${escapeHtml(serverName)}</span>
+              <span class="nc-meta-tag">iLvl ${escapeHtml(itemLevelValue)}</span>
+            </div>
+          </div>
+
+          <div class="nc-char-side-actions">
+            <button type="button" class="nc-side-action-btn">★ Favorite</button>
+            <button type="button" class="nc-side-action-btn">↗ Share</button>
+            <button type="button" class="nc-side-action-btn close-mini" aria-label="Close">×</button>
+          </div>
+        </div>
+
+        <div class="nc-char-score-row">
+          <div class="nc-level-badge">${escapeHtml(levelValue)}</div>
+          <div class="nc-cp-badge">CP ${escapeHtml(cpValue)}</div>
+        </div>
+
+        <div class="nc-profile-tabs" role="tablist" aria-label="Character tabs">
+          <button class="nc-profile-tab active" type="button" data-tab="equipment">Equipment</button>
+          <button class="nc-profile-tab" type="button" data-tab="skills">Skills</button>
+          <button class="nc-profile-tab" type="button" data-tab="daevanion">Daevanion</button>
+          <button class="nc-profile-tab" type="button" data-tab="stats">Stats</button>
+          <button class="nc-profile-tab" type="button" data-tab="cosmetics">Cosmetics</button>
+        </div>
+
+        <div class="nc-profile-panel">
+          ${tabContent.equipment}
+        </div>
+
+        <div class="nc-modal-footer">
+          <a class="profile-link" href="${externalProfileUrl}" target="_blank" rel="noreferrer">Open in AION NC</a>
         </div>
       </div>
     `;
 
     characterProfileBody.innerHTML = html;
+
+    characterProfileBody.querySelectorAll('.nc-profile-tab').forEach((button) => {
+      button.addEventListener('click', () => {
+        const targetTab = button.dataset.tab;
+        characterProfileBody.querySelectorAll('.nc-profile-tab').forEach((tab) => tab.classList.toggle('active', tab === button));
+        const panel = characterProfileBody.querySelector('.nc-profile-panel');
+        if (panel && tabContent[targetTab]) {
+          panel.innerHTML = tabContent[targetTab];
+        }
+      });
+    });
   } catch (error) {
     characterProfileBody.innerHTML = `
       <div class="profile-empty-state">
@@ -1165,7 +1516,7 @@ function renderMemberListFilters() {
   const nextClassValue = memberListClassFilter.value || 'all';
   memberListClassFilter.innerHTML = classOptions
     .map((className) => {
-      const label = className === 'all' ? 'Todas las clases' : className;
+      const label = className === 'all' ? t('allClasses') : className;
       return `<option value="${className}">${label}</option>`;
     })
     .join('');
@@ -1175,8 +1526,8 @@ function renderMemberListFilters() {
   const nextForceValue = memberListForceFilter.value || 'all';
   memberListForceFilter.innerHTML = forceOptions
     .map((forceId) => {
-      if (forceId === 'all') return '<option value="all">Todas las fuerzas</option>';
-      if (forceId === 'none') return '<option value="none">Sin fuerza</option>';
+      if (forceId === 'all') return `<option value="all">${t('allForces')}</option>`;
+      if (forceId === 'none') return `<option value="none">${t('noForce')}</option>`;
       const force = state.forces.find((item) => item.id === forceId);
       if (!force) return '';
       return `<option value="${force.id}">${force.name}</option>`;
@@ -1973,9 +2324,13 @@ saveNcApiBaseBtn?.addEventListener('click', () => {
   setSyncStatus(`API guardada: ${getNcApiBase()}`, 'ok');
 });
 
-toggleNcConfigBtn?.addEventListener('click', () => {
-  toggleNcConfigPanel();
+languageToggleBtn?.addEventListener('click', () => {
+  const nextLanguage = languageState.value === 'en' ? 'es' : 'en';
+  applyLanguage(nextLanguage);
+  updateRoleUi();
+  render();
 });
+
 
 ncRegionSelect?.addEventListener('change', (event) => {
   if (!requireStaffAction()) {
@@ -2025,6 +2380,7 @@ staffLogoutBtn?.addEventListener('click', () => {
 
 initTheme();
 initNcApiBase();
+applyLanguage(getLanguagePreference());
 initRole();
 setSyncStatus(`API NC: ${getNcApiBase()}`);
 setActiveView('force');
