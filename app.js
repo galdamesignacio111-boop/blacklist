@@ -1428,38 +1428,53 @@ async function openCharacterProfileModal(memberId) {
       '<div class="nc-gear-item"><div class="nc-gear-thumb">✦</div><div class="nc-gear-copy"><strong>+10 Vakron Boots</strong><span>Boots</span></div></div>',
     ].join('');
 
+    const detailItems = [
+      {
+        id: 'gear',
+        title: 'Gear',
+        body: `<div class="nc-gear-list">${gearList}</div>`,
+      },
+      {
+        id: 'stats',
+        title: 'Main Stats',
+        body: `<div class="nc-summary-grid">${statCards}</div>`,
+      },
+      {
+        id: 'titles',
+        title: 'Title',
+        body: `<div class="nc-title-grid">${titleCards}</div>`,
+      },
+      {
+        id: 'runes',
+        title: 'Runes / Arcana',
+        body: `<div class="nc-equipment-grid">${runesCards}</div>`,
+      },
+      {
+        id: 'daevanion',
+        title: 'Daevanion',
+        body: `<div class="nc-equipment-grid">${daevanionCards}</div>`,
+      },
+      {
+        id: 'cosmetics',
+        title: 'Pet & Wings',
+        body: `<div class="nc-equipment-grid">${cosmeticsCards}</div>`,
+      },
+    ];
+
     const tabContent = {
       equipment: `
-        <div class="nc-two-column-panel">
-          <div class="nc-side-stack">
-            <div class="nc-panel-section">
-              <h4>Main Stats</h4>
-              <div class="nc-summary-grid">${statCards}</div>
+        <div class="nc-accordion-panel">
+          ${detailItems.map((item) => `
+            <div class="nc-accordion-item ${item.id === 'gear' ? 'open' : ''}">
+              <button class="nc-accordion-trigger" type="button" data-target="${item.id}">
+                <span>${escapeHtml(item.title)}</span>
+                <span class="nc-accordion-icon">+</span>
+              </button>
+              <div class="nc-accordion-body" ${item.id === 'gear' ? 'style="display:block;"' : ''}>
+                ${item.body}
+              </div>
             </div>
-            <div class="nc-panel-section">
-              <h4>Title</h4>
-              <div class="nc-title-grid">${titleCards}</div>
-            </div>
-            <div class="nc-panel-section">
-              <h4>Daevanion</h4>
-              <div class="nc-equipment-grid">${daevanionCards}</div>
-            </div>
-          </div>
-
-          <div class="nc-side-stack">
-            <div class="nc-panel-section">
-              <h4>Gear</h4>
-              <div class="nc-gear-list">${gearList}</div>
-            </div>
-            <div class="nc-panel-section">
-              <h4>Pet & Wings</h4>
-              <div class="nc-equipment-grid">${cosmeticsCards}</div>
-            </div>
-            <div class="nc-panel-section">
-              <h4>Runes / Arcana</h4>
-              <div class="nc-equipment-grid">${runesCards}</div>
-            </div>
-          </div>
+          `).join('')}
         </div>
       `,
       skills: `
@@ -1532,6 +1547,14 @@ async function openCharacterProfileModal(memberId) {
           ${tabContent.equipment}
         </div>
 
+        <div class="nc-detail-panel" aria-live="polite">
+          <div class="nc-detail-header">Selected detail</div>
+          <div class="nc-detail-body">
+            <strong>Gear overview</strong>
+            <span>Click a card to inspect gear, runes, or skill details.</span>
+          </div>
+        </div>
+
         <div class="nc-modal-footer">
           <a class="profile-link" href="${externalProfileUrl}" target="_blank" rel="noreferrer">Open in AION NC</a>
         </div>
@@ -1539,6 +1562,27 @@ async function openCharacterProfileModal(memberId) {
     `;
 
     characterProfileBody.innerHTML = html;
+
+    characterProfileBody.querySelectorAll('.nc-accordion-trigger').forEach((button) => {
+      button.addEventListener('click', () => {
+        const item = button.closest('.nc-accordion-item');
+        const body = item?.querySelector('.nc-accordion-body');
+        if (!item || !body) return;
+        const isOpen = item.classList.contains('open');
+        item.classList.toggle('open', !isOpen);
+        body.style.display = isOpen ? 'none' : 'block';
+      });
+    });
+
+    characterProfileBody.querySelectorAll('.nc-equipment-card, .nc-rune-card, .nc-title-card, .nc-gear-item').forEach((card) => {
+      card.addEventListener('click', () => {
+        const label = card.querySelector('strong')?.textContent || 'Detail';
+        const sub = card.querySelector('span')?.textContent || 'Information';
+        const detailPanel = characterProfileBody.querySelector('.nc-detail-body');
+        if (!detailPanel) return;
+        detailPanel.innerHTML = `<strong>${escapeHtml(label)}</strong><span>${escapeHtml(sub)}</span><small>Playable item info • check stats, skill bonuses, and equipment synergy.</small>`;
+      });
+    });
 
     characterProfileBody.querySelectorAll('.nc-profile-tab').forEach((button) => {
       button.addEventListener('click', () => {

@@ -1094,6 +1094,8 @@ body[data-role="viewer"] .delete-party-btn {
 .profile-modal-body {
   display: block;
   background: rgba(7, 12, 20, 0.96);
+  max-height: 82vh;
+  overflow: auto;
 }
 
 .profile-loading,
@@ -1111,6 +1113,7 @@ body[data-role="viewer"] .delete-party-btn {
   gap: 18px;
   padding: 18px 18px 16px;
   background: linear-gradient(180deg, rgba(4, 10, 18, 0.96), rgba(14, 21, 33, 0.96));
+  max-height: 82vh;
 }
 
 .nc-char-header {
@@ -1285,6 +1288,57 @@ body[data-role="viewer"] .delete-party-btn {
   border: 1px solid rgba(136, 168, 214, 0.15);
   border-radius: 12px;
   padding: 18px;
+  max-height: min(56vh, 640px);
+  overflow: auto;
+}
+
+.nc-accordion-panel {
+  display: grid;
+  gap: 10px;
+}
+
+.nc-accordion-item {
+  border: 1px solid rgba(131, 165, 217, 0.22);
+  border-radius: 12px;
+  background: rgba(11, 18, 27, 0.85);
+  overflow: hidden;
+}
+
+.nc-accordion-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0.9rem 1rem;
+  background: transparent;
+  border: 0;
+  color: #edf5ff;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: left;
+  cursor: pointer;
+}
+
+.nc-accordion-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: rgba(122, 168, 255, 0.12);
+  color: #dfeefc;
+}
+
+.nc-accordion-item.open .nc-accordion-icon {
+  transform: rotate(45deg);
+}
+
+.nc-accordion-body {
+  display: none;
+  padding: 0 14px 14px;
 }
 
 .nc-two-column-panel {
@@ -1319,7 +1373,8 @@ body[data-role="viewer"] .delete-party-btn {
 
 .nc-equipment-card,
 .nc-rune-card,
-.nc-title-card {
+.nc-title-card,
+.nc-gear-item {
   display: grid;
   grid-template-columns: 46px minmax(0, 1fr);
   align-items: center;
@@ -1329,6 +1384,17 @@ body[data-role="viewer"] .delete-party-btn {
   background: rgba(12, 22, 35, 0.8);
   border: 1px solid rgba(119, 151, 211, 0.26);
   min-height: 72px;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.nc-equipment-card:hover,
+.nc-rune-card:hover,
+.nc-title-card:hover,
+.nc-gear-item:hover {
+  transform: translateY(-1px);
+  border-color: rgba(127, 200, 255, 0.56);
+  box-shadow: 0 10px 24px rgba(7, 20, 36, 0.4);
 }
 
 .nc-equipment-icon,
@@ -1468,6 +1534,37 @@ body[data-role="viewer"] .delete-party-btn {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
   gap: 12px;
+}
+
+.nc-detail-panel {
+  display: grid;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(130, 166, 224, 0.18);
+  background: rgba(10, 18, 28, 0.88);
+}
+
+.nc-detail-header {
+  color: #b7cdf8;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.nc-detail-body {
+  display: grid;
+  gap: 4px;
+  color: #edf5ff;
+}
+
+.nc-detail-body strong {
+  font-size: 1rem;
+}
+
+.nc-detail-body span,
+.nc-detail-body small {
+  color: #9bb2d1;
 }
 
 .nc-modal-footer {
