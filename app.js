@@ -16,6 +16,7 @@ const selectedMemberId = { value: null };
 const draggedMemberId = { value: null };
 const selectedClassFilter = { value: null };
 const syncState = { busy: false };
+const memberSyncState = {};
 const roleState = { value: 'viewer' };
 const languageState = { value: 'es' };
 const CLASSES = [
@@ -1391,10 +1392,17 @@ async function openCharacterProfileModal(memberId) {
           </div>
         `).join('');
 
+    const titleCards = [
+      '<div class="nc-title-card"><div class="nc-title-icon">⚔</div><div class="nc-title-copy"><strong>Offensive</strong><span>72/105</span></div></div>',
+      '<div class="nc-title-card"><div class="nc-title-icon">🛡</div><div class="nc-title-copy"><strong>Defensive</strong><span>68/98</span></div></div>',
+      '<div class="nc-title-card"><div class="nc-title-icon">✦</div><div class="nc-title-copy"><strong>Other</strong><span>69/101</span></div></div>',
+    ].join('');
+
     const daevanionCards = [
-      '<div class="nc-equipment-card"><div class="nc-equipment-icon">✦</div><div class="nc-equipment-copy"><strong>Unbound by Genius</strong><span>Daevanion</span></div></div>',
-      '<div class="nc-equipment-card"><div class="nc-equipment-icon">✧</div><div class="nc-equipment-copy"><strong>Saint of Altgard</strong><span>Title</span></div></div>',
-      '<div class="nc-equipment-card"><div class="nc-equipment-icon">✺</div><div class="nc-equipment-copy"><strong>Journey&apos;s Path</strong><span>Achievement</span></div></div>',
+      '<div class="nc-equipment-card"><div class="nc-equipment-icon">✦</div><div class="nc-equipment-copy"><strong>Nezekan</strong><span>63/88</span></div></div>',
+      '<div class="nc-equipment-card"><div class="nc-equipment-icon">✧</div><div class="nc-equipment-copy"><strong>Zikel</strong><span>66/88</span></div></div>',
+      '<div class="nc-equipment-card"><div class="nc-equipment-icon">✹</div><div class="nc-equipment-copy"><strong>Vaizel</strong><span>60/88</span></div></div>',
+      '<div class="nc-equipment-card"><div class="nc-equipment-icon">✺</div><div class="nc-equipment-copy"><strong>Triniel</strong><span>75/116</span></div></div>',
     ].join('');
 
     const cosmeticsCards = [
@@ -1402,17 +1410,62 @@ async function openCharacterProfileModal(memberId) {
       '<div class="nc-equipment-card"><div class="nc-equipment-icon">◈</div><div class="nc-equipment-copy"><strong>Armor Skin</strong><span>Style</span></div></div>',
     ].join('');
 
+    const runesCards = [
+      '<div class="nc-rune-card"><div class="nc-rune-icon">✦</div><div class="nc-rune-copy"><strong>+0 Compass of Magic</strong><span>Arcana Slot 1</span></div></div>',
+      '<div class="nc-rune-card"><div class="nc-rune-icon">✦</div><div class="nc-rune-copy"><strong>+0 Bless of Magic</strong><span>Arcana Slot 2</span></div></div>',
+      '<div class="nc-rune-card"><div class="nc-rune-icon">✦</div><div class="nc-rune-copy"><strong>+0 Mirror of Magic</strong><span>Arcana Slot 3</span></div></div>',
+    ].join('');
+
+    const gearList = [
+      '<div class="nc-gear-item"><div class="nc-gear-thumb">✦</div><div class="nc-gear-copy"><strong>+13 Spiritforge Mace</strong><span>Main Hand</span></div></div>',
+      '<div class="nc-gear-item"><div class="nc-gear-thumb">✦</div><div class="nc-gear-copy"><strong>+10 Vakron Guard</strong><span>Off-hand</span></div></div>',
+      '<div class="nc-gear-item"><div class="nc-gear-thumb">✦</div><div class="nc-gear-copy"><strong>+10 Vakron Helmet</strong><span>Helmet</span></div></div>',
+      '<div class="nc-gear-item"><div class="nc-gear-thumb">✦</div><div class="nc-gear-copy"><strong>+10 Nuakum Pauldrons</strong><span>Shoulders</span></div></div>',
+      '<div class="nc-gear-item"><div class="nc-gear-thumb">✦</div><div class="nc-gear-copy"><strong>+10 Nuakum Breastplate</strong><span>Torso</span></div></div>',
+      '<div class="nc-gear-item"><div class="nc-gear-thumb">✦</div><div class="nc-gear-copy"><strong>+5 Noble Belt</strong><span>Belt</span></div></div>',
+      '<div class="nc-gear-item"><div class="nc-gear-thumb">✦</div><div class="nc-gear-copy"><strong>+10 Vakron Gloves</strong><span>Gloves</span></div></div>',
+      '<div class="nc-gear-item"><div class="nc-gear-thumb">✦</div><div class="nc-gear-copy"><strong>+10 Gartuq Cloak</strong><span>Cloak</span></div></div>',
+      '<div class="nc-gear-item"><div class="nc-gear-thumb">✦</div><div class="nc-gear-copy"><strong>+10 Vakron Boots</strong><span>Boots</span></div></div>',
+    ].join('');
+
     const tabContent = {
       equipment: `
-        <div class="nc-panel-section">
-          <h4>Weapons</h4>
-          <div class="nc-equipment-grid">${equipmentCards}</div>
+        <div class="nc-two-column-panel">
+          <div class="nc-side-stack">
+            <div class="nc-panel-section">
+              <h4>Main Stats</h4>
+              <div class="nc-summary-grid">${statCards}</div>
+            </div>
+            <div class="nc-panel-section">
+              <h4>Title</h4>
+              <div class="nc-title-grid">${titleCards}</div>
+            </div>
+            <div class="nc-panel-section">
+              <h4>Daevanion</h4>
+              <div class="nc-equipment-grid">${daevanionCards}</div>
+            </div>
+          </div>
+
+          <div class="nc-side-stack">
+            <div class="nc-panel-section">
+              <h4>Gear</h4>
+              <div class="nc-gear-list">${gearList}</div>
+            </div>
+            <div class="nc-panel-section">
+              <h4>Pet & Wings</h4>
+              <div class="nc-equipment-grid">${cosmeticsCards}</div>
+            </div>
+            <div class="nc-panel-section">
+              <h4>Runes / Arcana</h4>
+              <div class="nc-equipment-grid">${runesCards}</div>
+            </div>
+          </div>
         </div>
       `,
       skills: `
         <div class="nc-panel-section">
           <h4>Active Skills</h4>
-          <div class="nc-equipment-grid">${skillCards}</div>
+          <div class="nc-skill-grid">${skillCards || '<div class="profile-empty-state">Skill data not available yet.</div>'}</div>
         </div>
       `,
       daevanion: `
@@ -1538,6 +1591,14 @@ function renderMemberListFilters() {
   if (memberListSort && !memberListSort.value) {
     memberListSort.value = 'name-asc';
   }
+}
+
+function getMemberSyncStatus(memberId) {
+  return memberSyncState[memberId] || { state: 'idle', label: '' };
+}
+
+function setMemberSyncState(memberId, state, label = '') {
+  memberSyncState[memberId] = { state, label };
 }
 
 function getClassMeta(className) {
@@ -1687,6 +1748,15 @@ function renderMemberSearchResults() {
     .map((member) => {
       const isActive = selectedMemberId.value === member.id;
       const meta = getClassMeta(member.className);
+      const syncStatus = getMemberSyncStatus(member.id);
+      const syncLabel = syncStatus.state === 'busy'
+        ? `Sincronizando ${escapeHtml(member.name)}...`
+        : syncStatus.state === 'ok'
+          ? 'Miembro OK'
+          : syncStatus.state === 'error'
+            ? 'Error al sincronizar'
+            : '';
+
       return `
         <button class="member-search-result ${isActive ? 'active' : ''}" type="button" data-member-id="${member.id}">
           <div class="member-search-info">
@@ -1695,6 +1765,7 @@ function renderMemberSearchResults() {
             <div>
               <div class="member-search-name">${escapeHtml(member.name)}</div>
               <div class="member-search-class" style="color: ${meta.color};">${member.className} | iLvl ${formatStatValue(member.ilevel)} | CP ${formatStatValue(member.cp)}</div>
+              ${syncLabel ? `<div class="member-sync-inline ${syncStatus.state}">${syncStatus.state === 'busy' ? '<span class="member-sync-spinner"></span>' : ''}${syncLabel}</div>` : ''}
             </div>
           </div>
           <div class="member-search-location">${member.forceName} / ${member.partyName}</div>
@@ -1861,14 +1932,24 @@ function renderGlobalMembers() {
         `;
       }
 
+      const syncStatus = getMemberSyncStatus(member.id);
+      const inlineSyncLabel = syncStatus.state === 'busy'
+        ? `Sincronizando ${escapeHtml(member.name)}...`
+        : syncStatus.state === 'ok'
+          ? 'Miembro OK'
+          : syncStatus.state === 'error'
+            ? 'Error al sincronizar'
+            : '';
+
       return `
         <div class="global-member-row">
           <div class="global-member-main">
             <img class="class-icon" src="${meta.iconUrl || ''}" alt="${member.className}" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';" />
             <span class="class-icon-fallback" style="display:none; color: ${meta.color}">${meta.icon}</span>
-            <div>
+            <div class="member-name-column">
                 <button class="member-name-trigger" type="button" data-member-id="${member.id}" style="color: ${meta.color};">${escapeHtml(member.name)}</button>
                 <small>${member.partyName}</small>
+                ${inlineSyncLabel ? `<div class="member-sync-inline ${syncStatus.state}">${syncStatus.state === 'busy' ? '<span class="member-sync-spinner"></span>' : ''}${inlineSyncLabel}</div>` : ''}
             </div>
           </div>
             <div class="global-member-class" style="color: ${meta.color};">${member.className}</div>
@@ -1936,10 +2017,22 @@ function renderGlobalMembers() {
       }
 
       try {
+        const memberId = button.dataset.memberId;
+        const member = getAllMembers().find((item) => item.id === memberId);
+        if (!member) {
+          return;
+        }
+
+        setMemberSyncState(memberId, 'busy', `Sincronizando ${member.name}...`);
         syncState.busy = true;
-        await syncMemberFromNc(button.dataset.memberId);
-        setSyncStatus('Miembro sincronizado con NC.', 'ok');
+        render();
+        await syncMemberFromNc(memberId);
+        setMemberSyncState(memberId, 'ok', 'Miembro OK');
+        setSyncStatus(`Miembro sincronizado: ${member.name}`, 'ok');
       } catch (error) {
+        const memberId = button.dataset.memberId;
+        const member = getAllMembers().find((item) => item.id === memberId);
+        setMemberSyncState(memberId, 'error', `Error: ${member?.name || 'miembro'}`);
         setSyncStatus(`Error al sincronizar: ${error?.message || 'desconocido'}`, 'error');
       } finally {
         syncState.busy = false;

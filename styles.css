@@ -727,6 +727,58 @@ body[data-role="viewer"] .delete-party-btn {
   font-size: 0.7rem;
 }
 
+.member-name-column {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.member-sync-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.64rem;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  font-weight: 700;
+  text-transform: uppercase;
+  border: 1px solid rgba(130, 163, 219, 0.24);
+  background: linear-gradient(180deg, rgba(18, 28, 40, 0.9), rgba(12, 19, 29, 0.9));
+  color: #d5e8ff;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+}
+
+.member-sync-inline.busy {
+  color: #bfe1ff;
+  border-color: rgba(123, 183, 255, 0.5);
+  background: linear-gradient(180deg, rgba(21, 38, 56, 0.95), rgba(15, 25, 36, 0.95));
+}
+
+.member-sync-inline.ok {
+  color: #9cf1c3;
+  border-color: rgba(97, 205, 142, 0.52);
+  background: linear-gradient(180deg, rgba(16, 47, 36, 0.95), rgba(12, 32, 25, 0.95));
+}
+
+.member-sync-inline.error {
+  color: #ffb8b8;
+  border-color: rgba(255, 109, 109, 0.5);
+  background: linear-gradient(180deg, rgba(51, 20, 21, 0.95), rgba(34, 15, 17, 0.95));
+}
+
+.member-sync-spinner {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 2px solid rgba(191, 223, 255, 0.35);
+  border-top-color: #dfeeff;
+  display: inline-block;
+  animation: syncPulse 0.8s linear infinite;
+}
+
 .global-member-meta {
   display: flex;
   align-items: center;
@@ -1235,6 +1287,17 @@ body[data-role="viewer"] .delete-party-btn {
   padding: 18px;
 }
 
+.nc-two-column-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 18px;
+}
+
+.nc-side-stack {
+  display: grid;
+  gap: 16px;
+}
+
 .nc-panel-section {
   display: grid;
   gap: 12px;
@@ -1250,11 +1313,13 @@ body[data-role="viewer"] .delete-party-btn {
 
 .nc-equipment-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 12px;
 }
 
-.nc-equipment-card {
+.nc-equipment-card,
+.nc-rune-card,
+.nc-title-card {
   display: grid;
   grid-template-columns: 46px minmax(0, 1fr);
   align-items: center;
@@ -1266,7 +1331,9 @@ body[data-role="viewer"] .delete-party-btn {
   min-height: 72px;
 }
 
-.nc-equipment-icon {
+.nc-equipment-icon,
+.nc-rune-icon,
+.nc-title-icon {
   display: grid;
   place-items: center;
   width: 42px;
@@ -1278,13 +1345,17 @@ body[data-role="viewer"] .delete-party-btn {
   font-weight: 700;
 }
 
-.nc-equipment-copy {
+.nc-equipment-copy,
+.nc-rune-copy,
+.nc-title-copy {
   display: grid;
   gap: 3px;
   min-width: 0;
 }
 
-.nc-equipment-copy strong {
+.nc-equipment-copy strong,
+.nc-rune-copy strong,
+.nc-title-copy strong {
   font-size: 0.95rem;
   color: #ecf5ff;
   white-space: nowrap;
@@ -1292,9 +1363,76 @@ body[data-role="viewer"] .delete-party-btn {
   text-overflow: ellipsis;
 }
 
-.nc-equipment-copy span {
+.nc-equipment-copy span,
+.nc-rune-copy span,
+.nc-title-copy span {
   color: #9fb8d9;
   font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.nc-title-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.nc-rune-card {
+  grid-template-columns: 36px minmax(0, 1fr);
+  min-height: 62px;
+}
+
+.nc-rune-icon {
+  width: 30px;
+  height: 30px;
+  font-size: 0.82rem;
+}
+
+.nc-gear-list {
+  display: grid;
+  gap: 10px;
+}
+
+.nc-gear-item {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1px solid rgba(119, 151, 211, 0.22);
+  background: rgba(10, 17, 25, 0.8);
+  border-radius: 12px;
+}
+
+.nc-gear-thumb {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(143, 200, 255, 0.14), rgba(70, 91, 149, 0.2));
+  border: 1px solid rgba(123, 182, 255, 0.26);
+  color: #dfeaff;
+}
+
+.nc-gear-copy {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.nc-gear-copy strong {
+  font-size: 0.9rem;
+  color: #ecf5ff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nc-gear-copy span {
+  color: #97afd3;
+  font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -1324,6 +1462,12 @@ body[data-role="viewer"] .delete-party-btn {
 .nc-summary-item strong {
   font-size: 1rem;
   color: #edf3ff;
+}
+
+.nc-skill-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 12px;
 }
 
 .nc-modal-footer {
