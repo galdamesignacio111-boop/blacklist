@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: blacklist-backend
+    env: node
+    region: ohio
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        value: postgresql://neondb_owner:npg_WyjsZA0KmVu6@ep-polished-scene-bbm7b0o4-pooler.c-15.us-east-1.aws.neon.tech/neondb?sslmode=require
+      - key: JWT_SECRET
+        value: 74a32baecfcb5b7e288a12fbb67861be
+      - key: STAFF_PASSWORD
+        value: blacklist2026
+      - key: CORS_ORIGIN
+        value: https://blacklistapp.netlify.app
+
+  - type: web
+    name: blacklist-nc-proxy
+    env: node
+    region: ohio
+    plan: free
+    rootDir: .
+    buildCommand: echo "No install needed"
+    startCommand: node nc-proxy-server.js
+    envVars:
+      - key: PORT
+        value: 10000
